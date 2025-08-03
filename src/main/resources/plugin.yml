@@ -1,0 +1,7 @@
+name: neopbb
+version: '0.1.0'
+main: me.honkling.neopbb.NeoPBB
+api-version: '1.21'
+prefix: neopbb
+authors: [ lilrosalyn ]
+description: HELLO
