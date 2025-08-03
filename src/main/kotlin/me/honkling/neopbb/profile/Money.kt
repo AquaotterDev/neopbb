@@ -2,6 +2,7 @@ package me.honkling.neopbb.profile
 
 import me.honkling.neopbb.lib.mm
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 fun Player.purchase(cost: Float, alreadyHasPurchased: Boolean = false, block: () -> Unit) {
     if (alreadyHasPurchased)
@@ -12,4 +13,8 @@ fun Player.purchase(cost: Float, alreadyHasPurchased: Boolean = false, block: ()
 
     money -= cost
     block()
+}
+
+fun Player.purchaseItem(cost: Float, itemStack: ItemStack) = purchase(cost) {
+    inventory.addItem(itemStack)
 }
