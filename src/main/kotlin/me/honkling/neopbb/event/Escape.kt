@@ -1,0 +1,39 @@
+@file:Listener
+
+package me.honkling.neopbb.event
+
+import me.honkling.commando.spigot.event.Listener
+import me.honkling.neopbb.lib.honeyBottle
+import me.honkling.neopbb.lib.legalGoldenApple
+import me.honkling.neopbb.lib.milk
+import me.honkling.neopbb.lib.nauseaPotion
+import me.honkling.neopbb.lib.soup
+import me.honkling.neopbb.lib.steak
+import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.prepare
+import me.honkling.neopbb.profile.purchaseItem
+import me.honkling.neopbb.profile.role
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.block.Sign
+import org.bukkit.block.sign.Side
+import org.bukkit.event.player.PlayerInteractEvent
+
+private fun onInteract(event: PlayerInteractEvent) {
+    val player = event.player
+    val state = event.clickedBlock?.state as? Sign
+        ?: return
+
+    val side = state.getSide(Side.FRONT)
+    val line = PlainTextComponentSerializer.plainText().serialize(side.line(1))
+
+    when (line) {
+        "Get Gear" -> {
+            if (player.role != Role.Prisoner)
+                return
+
+            player.role = Role.Criminal
+            player.prepare(false)
+        }
+        "Restore Kit" -> player.prepare(false)
+    }
+}
