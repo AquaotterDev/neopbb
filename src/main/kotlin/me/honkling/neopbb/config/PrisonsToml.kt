@@ -21,7 +21,8 @@ data class PrisonsToml(
         val blackMarketIn: Location,
         val blackMarketOut: Location,
         val respawn: Location,
-        val bertrude: Location
+        val bertrude: Location,
+        val solitary: Location
     )
 }
 

@@ -4,16 +4,24 @@ package me.honkling.neopbb.command
 
 import me.honkling.commando.common.command.node.ParameterNode
 import me.honkling.commando.spigot.command.Command
+import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.Invite
 import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.cleanUp
+import me.honkling.neopbb.profile.forceRespawn
+import me.honkling.neopbb.profile.inSolitary
 import me.honkling.neopbb.profile.invite
+import me.honkling.neopbb.profile.isRespawning
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
+import me.honkling.neopbb.profile.solitaryTask
 import me.honkling.neopbb.profile.warden
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 private fun warden(player: Player) {
     if (warden != null)
@@ -69,4 +77,47 @@ private fun `fire$complete`(sender: CommandSender, node: ParameterNode<Command>,
         .filter { it.role.isAuthority }
         .map { it.name }
         .filter { it.contains(input, true) }
+}
+
+@OptIn(ExperimentalTime::class)
+private fun solitary(sender: Player, player: Player) {
+    if (warden != sender)
+        return sender.sendMessage("<p>You aren't the warden.".mm)
+
+    if (player.inSolitary)
+        return sender.sendMessage("<p>They are already in solitary.".mm)
+
+    if (player.role.isAuthority)
+        return sender.sendMessage("<p>You can't send a guard to solitary.".mm)
+
+    if (!player.isRespawning)
+        return sender.sendMessage("<p>They must be dead to be put in solitary.".mm)
+
+    var player = player
+    player.role = Role.Solitary
+    player.solitaryTask = Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
+        Bukkit.getPlayer(player.uniqueId)?.let { player = it } // Refresh player instance in case they relogged
+        player.solitaryTask = null
+        player.role = Role.Prisoner
+        player.prepare(true)
+
+        if (!player.isOnline)
+            player.cleanUp()
+    }, 20L * 120)
+    player.forceRespawn()
+}
+
+private fun release(sender: Player, player: Player) {
+    if (warden != sender)
+        return sender.sendMessage("<p>You aren't the warden.".mm)
+
+    if (!player.inSolitary)
+        return sender.sendMessage("<p>They aren't in solitary.".mm)
+
+    player.role = Role.Prisoner
+    player.solitaryTask?.let { Bukkit.getScheduler().cancelTask(it) }
+
+    if (player.isRespawning)
+        player.forceRespawn()
+    else player.prepare(true)
 }

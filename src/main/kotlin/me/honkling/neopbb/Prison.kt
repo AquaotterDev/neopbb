@@ -4,12 +4,17 @@ import me.honkling.neopbb.config.PrisonsToml
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.role
 import org.bukkit.Bukkit
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 lateinit var currentPrison: PrisonsToml.Prison; internal set
 var lastMapSwitch = 0L
 
+@OptIn(ExperimentalTime::class)
 fun switchMap(newPrison: PrisonsToml.Prison) {
     currentPrison = newPrison
+    lastMapSwitch = Clock.System.now().epochSeconds
 
     for (player in Bukkit.getOnlinePlayers()) {
         val role = player.role

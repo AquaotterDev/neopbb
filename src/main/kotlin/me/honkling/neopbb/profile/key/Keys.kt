@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
+import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.typeOf
@@ -76,7 +77,7 @@ class PersistentKey<T>(
 }
 
 class NonPersistentKey<T>(val fallbackValue: T?, val onSet: Setter<T>) : Key<T> {
-    private var backing = mutableMapOf<PersistentDataHolder, T>()
+    private var backing = mutableMapOf<UUID, T>()
 
     override fun getValue(thisRef: PersistentDataContainer, property: KProperty<*>): T {
         throw IllegalStateException("Non persistent keys can only be stored on holders")
@@ -88,16 +89,19 @@ class NonPersistentKey<T>(val fallbackValue: T?, val onSet: Setter<T>) : Key<T> 
 
     @Suppress("UNCHECKED_CAST")
     override operator fun getValue(thisRef: PersistentDataHolder, property: KProperty<*>): T {
-        return backing.getOrPut(thisRef) { fallbackValue as T }
+        thisRef as Player
+        return backing.getOrPut(thisRef.uniqueId) { fallbackValue as T }
     }
 
     override operator fun setValue(thisRef: PersistentDataHolder, property: KProperty<*>, value: T) {
+        thisRef as Player
         onSet(value)
-        backing[thisRef] = value
+        backing[thisRef.uniqueId] = value
     }
 
     fun cleanUp(thisRef: PersistentDataHolder) {
-        backing -= thisRef
+        thisRef as Player
+        backing -= thisRef.uniqueId
     }
 }
 
