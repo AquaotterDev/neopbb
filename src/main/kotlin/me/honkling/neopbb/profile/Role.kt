@@ -1,13 +1,19 @@
 package me.honkling.neopbb.profile
 
+import me.honkling.neopbb.criminalsTeam
 import me.honkling.neopbb.currentPrison
+import me.honkling.neopbb.guardsTeam
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.illegalGoldenApple
 import me.honkling.neopbb.lib.mm
+import me.honkling.neopbb.nursesTeam
+import me.honkling.neopbb.prisonersTeam
+import me.honkling.neopbb.solitaryTeam
+import me.honkling.neopbb.swatsTeam
+import me.honkling.neopbb.wardenTeam
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -20,6 +26,7 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scoreboard.Team
 
 data class Invite(val player: Player, val role: Role) {
     var taskID: Int? = null
@@ -57,10 +64,11 @@ val handcuffs = ItemStack(Material.IRON_SHOVEL)
 
 enum class Role(
     val isAuthority: Boolean,
+    val team: Team,
     prefix: String,
     val prepare: Player.(Boolean) -> Unit = {}
 ) {
-    Warden(true, "<white><gray>[<red>WARDEN</red>]</gray>", {
+    Warden(true, wardenTeam, "<white><gray>[<red>WARDEN</red>]</gray>", {
         for (player in Bukkit.getOnlinePlayers()) {
             if (player != warden && player.role.isAuthority) {
                 player.role = Prisoner
@@ -101,7 +109,7 @@ enum class Role(
 
         teleport(currentPrison.wardenSpawn)
     }),
-    Guard(true, "<gray>[<blue>GUARD</blue>]", {
+    Guard(true, guardsTeam, "<gray>[<blue>GUARD</blue>]", {
         val helmet = ItemStack(Material.IRON_HELMET)
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
@@ -140,7 +148,7 @@ enum class Role(
             ItemStack(Material.ARROW, 16)
         )
     }),
-    Nurse(true, "<gray>[<light_purple>NURSE</light_purple>]", {
+    Nurse(true, nursesTeam, "<gray>[<light_purple>NURSE</light_purple>]", {
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
@@ -185,7 +193,7 @@ enum class Role(
             ItemStack(Material.ARROW, 16)
         )
     }),
-    Swat(true, "<gray>[<dark_gray>SWAT</dark_gray>]", {
+    Swat(true, swatsTeam, "<gray>[<dark_gray>SWAT</dark_gray>]", {
         val helmet = ItemStack(Material.NETHERITE_HELMET)
         val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
         chestplate.addEnchantment(Enchantment.PROTECTION, 1)
@@ -210,7 +218,7 @@ enum class Role(
             ItemStack(Material.ARROW, 16)
         )
     }),
-    Criminal(false, "<gray>[<red>CRIMINAL</red>]", {
+    Criminal(false, criminalsTeam, "<gray>[<red>CRIMINAL</red>]", {
         val name = "Armor <red>[CONTRABAND]".mm
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
@@ -247,7 +255,7 @@ enum class Role(
         inventory.setItem(EquipmentSlot.FEET, boots)
         inventory.addItem(sword, illegalGoldenApple.asQuantity(4))
     }),
-    Prisoner(false, "<gray>[<gold>PRISONER</gold>]<dark_gray>", {
+    Prisoner(false, prisonersTeam, "<gray>[<gold>PRISONER</gold>]<dark_gray>", {
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
             .displayName("Prisoner Uniform")
@@ -271,7 +279,7 @@ enum class Role(
         inventory.setItem(EquipmentSlot.FEET, boots)
         teleport(currentPrison.prisonerSpawn)
     }),
-    Solitary(false, "<black><gray>[<black>SOLITARY</black>]</gray>");
+    Solitary(false, solitaryTeam, "<black><gray>[<black>SOLITARY</black>]</gray>");
 
     val prefix = prefix.mm
 }

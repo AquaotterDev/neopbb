@@ -17,6 +17,7 @@ import kotlin.time.ExperimentalTime
 var Player.role by createKey(Role.Prisoner, persistent = false)
 var Player.invite by createKey<Invite?>(false)
 var Player.money by createKey(0.0f)
+var Player.teamChat by createKey(fallbackValue = false)
 
 var Player.solitaryTask by createKey<Int?>(persistent = false)
 var Player.handcuffTask by createKey<Int?>(false)
@@ -38,6 +39,7 @@ fun Player.prepare(reset: Boolean) {
         Bukkit.getServer().sendMessage("<p><s>$name</s> is now $display!".mm)
     }
 
+    role.team.addPlayer(this)
     role.prepare(this, reset)
 }
 
