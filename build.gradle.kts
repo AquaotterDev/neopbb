@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.2.20-Beta2"
     id("com.gradleup.shadow") version "8.3.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
 }
 
 group = "me.honkling"
@@ -15,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation("io.github.honkling.commando:spigot:3.0.4")
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation(kotlin("reflect"))

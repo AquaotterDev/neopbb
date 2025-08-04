@@ -10,6 +10,7 @@ import kotlin.reflect.jvm.isAccessible
 
 var Player.role by createKey(Role.Prisoner, persistent = false)
 var Player.invite by createKey<Invite?>(false)
+var Player.handcuffTask by createKey<Int?>(false)
 var Player.money by createKey(0.0f)
 
 fun Player.prepare(reset: Boolean) {
@@ -31,7 +32,8 @@ fun Player.prepare(reset: Boolean) {
 fun Player.cleanUp() {
     val nonPersistentFields = listOf(
         Player::role,
-        Player::invite
+        Player::invite,
+        Player::handcuffTask
     )
 
     for (field in nonPersistentFields) {

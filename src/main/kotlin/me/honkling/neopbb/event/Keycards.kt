@@ -24,7 +24,10 @@ private fun onInteract(event: PlayerInteractEvent) {
         return
 
     block.world.playSound(Sound.sound {
-        it.type(Key.key("minecraft:block.iron_door.open"))
+        it.type(Key.key(
+            if (data.isOpen) "minecraft:block.iron_door.close"
+            else "minecraft:block.iron_door.open"
+        ))
     }, block.x.toDouble(), block.y.toDouble(), block.z.toDouble())
     event.isCancelled = true
     data.isOpen = !data.isOpen
