@@ -64,7 +64,7 @@ private fun fire(player: Player, target: Player) {
     if (warden != player)
         return player.sendMessage("<p>You aren't the warden.".mm)
 
-    if (!target.role.isAuthority)
+    if (!target.role.isAuthority || target.role == Role.Warden)
         return player.sendMessage("<p><s>${target.name}</s> isn't a guard.".mm)
 
     Bukkit.getServer().sendMessage("<p><s>${target.name}</s> has been fired!".mm)
@@ -74,7 +74,7 @@ private fun fire(player: Player, target: Player) {
 
 private fun `fire$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
     return Bukkit.getOnlinePlayers()
-        .filter { it.role.isAuthority }
+        .filter { it.role.isAuthority && it.role != Role.Warden }
         .map { it.name }
         .filter { it.contains(input, true) }
 }
