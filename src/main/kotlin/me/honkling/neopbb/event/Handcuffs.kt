@@ -16,6 +16,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDismountEvent
+import org.bukkit.event.entity.EntityMountEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -43,6 +44,14 @@ private fun onDeath(event: PlayerDeathEvent) {
         victim.handcuffTask = null
         attacker.removePassenger(victim)
     }, 20L * 20)
+}
+
+private fun onEnterVehicle(event: EntityMountEvent) {
+    val player = event.entity as? Player
+        ?: return
+
+    if (player.handcuffTask != null)
+        event.isCancelled = true
 }
 
 private fun onShift(event: PlayerToggleSneakEvent) {
