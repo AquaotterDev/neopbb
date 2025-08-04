@@ -13,6 +13,7 @@ import me.honkling.neopbb.profile.cleanUp
 import me.honkling.neopbb.profile.forceRespawn
 import me.honkling.neopbb.profile.inSolitary
 import me.honkling.neopbb.profile.isRespawning
+import me.honkling.neopbb.profile.money
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.respawnTask
 import me.honkling.neopbb.profile.role
@@ -21,6 +22,7 @@ import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -50,6 +52,18 @@ private fun onQuit(event: PlayerQuitEvent) {
 
     player.cleanUp()
     event.quitMessage("<p><s>${player.name}</s> has ran off.".mm)
+}
+
+private fun onDeath(event: PlayerDeathEvent) {
+    val player = event.player
+    val attacker = event.damageSource.causingEntity as? Player
+        ?: return
+
+    if (player.isGlowing) {
+        attacker.money += 100
+        attacker.sendMessage("<p><s>+100$</s> for killing a glowing player.".mm)
+        player.isGlowing = false
+    }
 }
 
 private fun onRespawn(event: PlayerPostRespawnEvent) {

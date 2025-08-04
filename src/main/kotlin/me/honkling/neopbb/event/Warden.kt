@@ -11,6 +11,9 @@ import me.honkling.neopbb.profile.purchase
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
+import me.honkling.neopbb.schedule.Period
+import me.honkling.neopbb.schedule.period
+import me.honkling.neopbb.schedule.tickSchedule
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.block.Sign
@@ -24,12 +27,18 @@ private fun onInteract(event: PlayerInteractEvent) {
         ?: return
 
     val side = state.getSide(Side.FRONT)
-    val line = PlainTextComponentSerializer.plainText().serialize(side.line(1))
+    val lineOne = PlainTextComponentSerializer.plainText().serialize(side.line(1))
+    val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(1))
 
-    when (line) {
-        "SWAT Guards" -> player.purchase(2500f, swatUnlocked) {
+    if (lineTwo == "SWAT Guards")
+        player.purchase(2500f, swatUnlocked) {
             Bukkit.getServer().sendMessage("<p><s>${player.name}</s> has unlocked SWAT guards!".mm)
             swatUnlocked = true
+        }
+    else when (lineOne) {
+        "Lockdown" -> {
+            period = Period.Lockdown
+            tickSchedule()
         }
         "Switch Maps" -> {
             if (player != warden)
