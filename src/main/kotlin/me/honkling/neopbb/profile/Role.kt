@@ -2,7 +2,7 @@ package me.honkling.neopbb.profile
 
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
-import me.honkling.neopbb.lib.goldenApple
+import me.honkling.neopbb.lib.illegalGoldenApple
 import me.honkling.neopbb.lib.mm
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
@@ -242,7 +242,7 @@ enum class Role(
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
         inventory.addItem(sword)
-        inventory.addItem(goldenApple.asQuantity(4))
+        inventory.addItem(illegalGoldenApple.asQuantity(4))
     }),
     Prisoner(false, {
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
