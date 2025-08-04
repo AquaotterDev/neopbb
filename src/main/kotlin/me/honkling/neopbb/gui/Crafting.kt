@@ -15,6 +15,7 @@ import me.honkling.neopbb.profile.keycard
 import me.honkling.neopbb.profile.money
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -23,15 +24,16 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 @Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
-class Crafting : Inventory by Bukkit.createInventory(null, 9) {
+class Crafting {
+    val inventory = Bukkit.createInventory(null, 9, Component.text("Crafting"))
+
     class EventNode(val gui: Crafting, val player: Player) : Listener {
         @EventHandler
         fun onClick(event: InventoryClickEvent) {
-            if (event.whoClicked != player || event.inventory != gui)
+            if (event.whoClicked != player || event.inventory != gui.inventory)
                 return
 
             fun tryCraft(result: ItemStack, vararg ingredients: Pair<Int, ItemStack>, cost: Float = 0f) {
@@ -44,8 +46,14 @@ class Crafting : Inventory by Bukkit.createInventory(null, 9) {
 
                 player.money -= cost
                 player.inventory.removeItemAnySlot(*ingredients.map { it.second }.toTypedArray())
-                player.inventory.addItem(result)
+                player.give(result)
+                player.playSound(Sound.sound {
+                    it.type(Key.key("minecraft:entity.item.pickup"))
+                })
             }
+
+            event.isCancelled = true
+            println("Slot: ${event.slot}")
 
             when (event.slot) {
                 0 -> tryCraft(rock, 9 to pebble)
@@ -58,36 +66,36 @@ class Crafting : Inventory by Bukkit.createInventory(null, 9) {
 
         @EventHandler
         fun onClose(event: InventoryCloseEvent) {
-            if (event.player == player || event.inventory != gui)
+            if (event.player == player || event.inventory != gui.inventory)
                 HandlerList.unregisterAll(this)
         }
     }
 
     init {
-        setItem(0, ItemStack(Material.COBBLESTONE)
+        inventory.setItem(0, ItemStack(Material.COBBLESTONE)
             .builder()
             .displayName("Rock")
             .lore("Recipe:".mm, "9x <s>Pebbles".mm)
             .build())
 
-        setItem(1, ItemStack(Material.PAPER)
+        inventory.setItem(1, ItemStack(Material.PAPER)
             .builder()
             .lore("Recipe:".mm, "1x <s>Coal".mm, "1x <s>Scrap Metal".mm, "15$".mm)
             .build())
 
-        setItem(2, ItemStack(Material.TRIPWIRE_HOOK)
+        inventory.setItem(2, ItemStack(Material.TRIPWIRE_HOOK)
             .builder()
             .displayName("Keycard")
             .lore("Recipe:".mm, "3x <s>Paper".mm, "2x <s>Sticks".mm)
             .build())
 
-        setItem(3, ItemStack(Material.SHEARS)
+        inventory.setItem(3, ItemStack(Material.SHEARS)
             .builder()
             .displayName("Wire Cutters")
             .lore("Recipe:".mm, "4x <s>Scrap Metal".mm, "2x <s>Sticks".mm, "1x <s>Rock".mm)
             .build())
 
-        setItem(4, ItemStack(Material.LEATHER_CHESTPLATE)
+        inventory.setItem(4, ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
             .displayName("Cloak")
             .lore("Recipe:".mm, "1x <s>Coal".mm, "15$".mm)
@@ -97,6 +105,6 @@ class Crafting : Inventory by Bukkit.createInventory(null, 9) {
     fun Player.openGUI() {
         val events = EventNode(this@Crafting, this)
         Bukkit.getPluginManager().registerEvents(events, instance)
-        openInventory(this@Crafting)
+        openInventory(this@Crafting.inventory)
     }
 }

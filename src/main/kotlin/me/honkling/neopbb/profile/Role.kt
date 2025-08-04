@@ -1,5 +1,6 @@
 package me.honkling.neopbb.profile
 
+import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.illegalGoldenApple
@@ -59,7 +60,6 @@ enum class Role(
 ) {
     Warden(true, {
         for (player in Bukkit.getOnlinePlayers()) {
-            println("Warden: $warden ($player/${player.role})")
             if (player != warden && player.role.isAuthority) {
                 player.role = Prisoner
                 player.prepare(true)
@@ -88,14 +88,16 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, ItemStack(Material.IRON_CHESTPLATE))
         inventory.setItem(EquipmentSlot.LEGS, ItemStack(Material.IRON_LEGGINGS))
         inventory.setItem(EquipmentSlot.FEET, ItemStack(Material.NETHERITE_BOOTS))
+        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
         inventory.addItem(
             sword,
-            handcuffs,
             ItemStack(Material.BOW),
-            ItemStack(Material.ARROW, 64),
+            handcuffs,
             ItemStack(Material.COOKED_BEEF, 64),
-            keycard,
+            ItemStack(Material.ARROW, 64)
         )
+
+        teleport(currentPrison.wardenSpawn)
     }),
     Guard(true, {
         val helmet = ItemStack(Material.IRON_HELMET)
@@ -127,13 +129,13 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
+        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
         inventory.addItem(
             sword,
-            handcuffs,
             ItemStack(Material.CROSSBOW),
-            ItemStack(Material.ARROW, 16),
+            handcuffs,
             ItemStack(Material.COOKED_BEEF, 32),
-            keycard
+            ItemStack(Material.ARROW, 16)
         )
     }),
     Nurse(true, {
@@ -171,14 +173,14 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
+        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
         inventory.addItem(
             sword,
-            handcuffs,
             ItemStack(Material.CROSSBOW),
-            ItemStack(Material.ARROW, 16),
+            handcuffs,
             ItemStack(Material.COOKED_BEEF, 32),
-            keycard,
-            potion
+            potion,
+            ItemStack(Material.ARROW, 16)
         )
     }),
     Swat(true, {
@@ -197,13 +199,13 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
+        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
         inventory.addItem(
             sword,
-            handcuffs,
             ItemStack(Material.BOW),
-            ItemStack(Material.ARROW, 16),
+            handcuffs,
             ItemStack(Material.COOKED_BEEF, 32),
-            keycard
+            ItemStack(Material.ARROW, 16)
         )
     }),
     Criminal(false, {
@@ -241,8 +243,7 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
-        inventory.addItem(sword)
-        inventory.addItem(illegalGoldenApple.asQuantity(4))
+        inventory.addItem(sword, illegalGoldenApple.asQuantity(4))
     }),
     Prisoner(false, {
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
@@ -266,5 +267,6 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
+        teleport(currentPrison.prisonerSpawn)
     })
 }

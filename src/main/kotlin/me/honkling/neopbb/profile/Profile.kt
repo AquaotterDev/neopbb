@@ -6,6 +6,7 @@ import me.honkling.neopbb.profile.key.createKey
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
+import kotlin.reflect.jvm.isAccessible
 
 var Player.role by createKey(Role.Prisoner, persistent = false)
 var Player.invite by createKey<Invite?>(false)
@@ -34,7 +35,8 @@ fun Player.cleanUp() {
     )
 
     for (field in nonPersistentFields) {
-        val key = field.get(this) as NonPersistentKey<*>
+        field.isAccessible = true
+        val key = field.getDelegate(this) as NonPersistentKey<*>
         key.cleanUp(this)
     }
 }

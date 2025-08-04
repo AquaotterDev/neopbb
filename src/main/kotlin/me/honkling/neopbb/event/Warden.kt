@@ -5,14 +5,27 @@ package me.honkling.neopbb.event
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lib.mm
+import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.purchase
+import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
+
+private fun onDeath(event: PlayerDeathEvent) {
+    val player = event.player
+
+    if (player == warden) {
+        player.role = Role.Prisoner
+        player.prepare(true)
+    }
+}
 
 private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player

@@ -22,3 +22,4 @@ val miniMessage = MiniMessage.builder()
 val String.mm: Component
     get() = miniMessage.deserialize(this)
         .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+        .colorIfAbsent(NamedTextColor.WHITE)

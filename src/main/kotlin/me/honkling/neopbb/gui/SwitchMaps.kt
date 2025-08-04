@@ -12,19 +12,16 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
 
-@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
-class SwitchMaps : Inventory by Bukkit.createInventory(
-    null,
-    ceil(prisonsToml.prisons.size / 9.0).toInt() * 9
-) {
+class SwitchMaps {
+    val inventory = Bukkit.createInventory(null, ceil(prisonsToml.prisons.size / 9.0).toInt() * 9)
+
     class EventNode(val gui: SwitchMaps, val player: Player) : Listener {
         @EventHandler
         fun onClick(event: InventoryClickEvent) {
-            if (event.whoClicked != player || event.inventory != gui)
+            if (event.whoClicked != player || event.inventory != gui.inventory)
                 return
 
             val index = event.slot
@@ -36,7 +33,7 @@ class SwitchMaps : Inventory by Bukkit.createInventory(
 
         @EventHandler
         fun onClose(event: InventoryCloseEvent) {
-            if (event.player == player || event.inventory != gui)
+            if (event.player == player || event.inventory != gui.inventory)
                 HandlerList.unregisterAll(this)
         }
     }
@@ -48,13 +45,13 @@ class SwitchMaps : Inventory by Bukkit.createInventory(
                 .displayName(prison.name.mm)
                 .build()
 
-            setItem(index, itemStack)
+            inventory.setItem(index, itemStack)
         }
     }
 
     fun Player.openGUI() {
         val events = EventNode(this@SwitchMaps, this)
         Bukkit.getPluginManager().registerEvents(events, instance)
-        openInventory(this@SwitchMaps)
+        openInventory(this@SwitchMaps.inventory)
     }
 }

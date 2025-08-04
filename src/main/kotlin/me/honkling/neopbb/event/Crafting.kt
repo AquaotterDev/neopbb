@@ -13,6 +13,7 @@ private fun onInteract(event: PlayerInteractEvent) {
     if (event.clickedBlock?.type != Material.CRAFTING_TABLE)
         return
 
+    event.isCancelled = true
     val gui = Crafting()
 
     with (gui) {

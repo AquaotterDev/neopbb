@@ -11,11 +11,12 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://jitpack.io/")
+    mavenLocal()
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    implementation("io.github.honkling.commando:spigot:3.0.2")
+    implementation("io.github.honkling.commando:spigot:3.0.4")
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation(kotlin("reflect"))
 }
@@ -27,21 +28,27 @@ tasks {
         // Your plugin's jar (or shadowJar if present) will be used automatically.
         minecraftVersion("1.21.4")
     }
+
+    jar {
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
+    }
+
+    build {
+        dependsOn("shadowJar")
+    }
+
+    processResources {
+        val props = mapOf("version" to version)
+        inputs.properties(props)
+        filteringCharset = "UTF-8"
+        filesMatching("plugin.yml") {
+            expand(props)
+        }
+    }
 }
 
 kotlin {
     jvmToolchain(21)
-}
-
-tasks.build {
-    dependsOn("shadowJar")
-}
-
-tasks.processResources {
-    val props = mapOf("version" to version)
-    inputs.properties(props)
-    filteringCharset = "UTF-8"
-    filesMatching("plugin.yml") {
-        expand(props)
-    }
 }
