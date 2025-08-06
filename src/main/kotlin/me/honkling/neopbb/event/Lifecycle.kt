@@ -4,6 +4,7 @@ package me.honkling.neopbb.event
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
+import io.papermc.paper.entity.TeleportFlag
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.instance
@@ -18,6 +19,7 @@ import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.respawnTask
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.warden
+import me.honkling.neopbb.profile.wardenCooldown
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
@@ -48,6 +50,7 @@ private fun onQuit(event: PlayerQuitEvent) {
         player.role = Role.Prisoner
         player.prepare(true)
         Bukkit.getServer().sendMessage("<p>The warden has left!".mm)
+        wardenCooldown = 20 * 5
     }
 
     player.cleanUp()
@@ -56,6 +59,7 @@ private fun onQuit(event: PlayerQuitEvent) {
 
 private fun onDeath(event: PlayerDeathEvent) {
     val player = event.player
+
     val attacker = event.damageSource.causingEntity as? Player
         ?: return
 
@@ -70,6 +74,12 @@ private fun onRespawn(event: PlayerPostRespawnEvent) {
     val player = event.player
     val attacker = player.lastDamageCause?.damageSource?.causingEntity
 
+    if (player == warden) {
+        Bukkit.getServer().sendMessage("<p>The warden has died!".mm)
+        player.role = Role.Prisoner
+        wardenCooldown = 20 * 5
+    }
+
     player.sendTitlePart(TitlePart.TITLE, "<red>Respawning...".mm)
     player.sendTitlePart(TitlePart.SUBTITLE, "<gray>Wait 10 seconds.".mm)
     player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
@@ -79,25 +89,23 @@ private fun onRespawn(event: PlayerPostRespawnEvent) {
     ))
 
     player.gameMode = GameMode.SPECTATOR
-    var ticks = 20L * 10
+    attacker?.let { player.teleport(it) }
+    val cooldown = 20L * 10
+    var ticks = cooldown
     player.respawnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, {
         ticks--
 
-        if (ticks == 0L) {
+        if (ticks <= 0L) {
             player.forceRespawn()
             return@scheduleSyncRepeatingTask
         }
 
-        if (attacker != null) {
-            // Set to null and then the attacker to refresh the camera
-            // (fixes bug where the client might not actually spectate
-            //  if the client hasn't finished loading chunks yet)
-            player.spectatorTarget = null
+        if (cooldown - ticks == 8L && attacker != null)
             player.spectatorTarget = attacker
-        } else player.teleport(
-            if (player.inSolitary) currentPrison.solitary
-            else currentPrison.respawn
-        )
+
+        if (attacker == null)
+            player.teleport(if (player.inSolitary) currentPrison.solitary
+                else currentPrison.respawn)
     }, 0L, 1L)
 }
 

@@ -45,10 +45,12 @@ fun Player.prepare(reset: Boolean) {
 }
 
 fun Player.forceRespawn() {
-    gameMode = GameMode.ADVENTURE
+    respawnTask?.let { Bukkit.getScheduler().cancelTask(it) }
+    respawnTask = null
 
-    if (this == warden)
-        role = Role.Prisoner
+    gameMode = GameMode.SPECTATOR
+    spectatorTarget = null
+    gameMode = GameMode.ADVENTURE
 
     sendTitlePart(TitlePart.TITLE, Component.empty())
     sendTitlePart(TitlePart.SUBTITLE, Component.empty())
@@ -57,8 +59,6 @@ fun Player.forceRespawn() {
         if (inSolitary) currentPrison.solitary
         else currentPrison.respawn
     )
-    respawnTask?.let { Bukkit.getScheduler().cancelTask(it) }
-    respawnTask = null
 }
 
 fun Player.cleanUp() {
