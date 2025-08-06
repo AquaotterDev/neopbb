@@ -5,6 +5,7 @@ import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.key.NonPersistentKey
 import me.honkling.neopbb.profile.key.createKey
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -75,4 +76,12 @@ fun Player.cleanUp() {
         val key = field.getDelegate(this) as NonPersistentKey<*>
         key.cleanUp(this)
     }
+}
+
+fun Player.rankAndName(): Component {
+    val prefix = role.prefix
+    val name = name()
+
+    return prefix.appendSpace()
+        .append(name.color(if (role == Role.Warden) NamedTextColor.WHITE else NamedTextColor.GRAY))
 }

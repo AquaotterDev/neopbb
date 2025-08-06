@@ -6,5 +6,6 @@ import org.bukkit.entity.Player
 val warden: Player?
     get() = Bukkit.getOnlinePlayers().find { it.role == Role.Warden }
 
+var wardenStart = 0L
 var wardenCooldown = 0
 var swatUnlocked = false

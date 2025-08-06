@@ -7,6 +7,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.command.teamchat
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.rankAndName
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.teamChat
 import net.kyori.adventure.text.Component
@@ -30,12 +31,8 @@ private fun onChat(event: AsyncChatEvent) {
         return
     }
 
-    val prefix = role.prefix
-    val name = player.name()
-
     event.renderer { _, _, _, _ ->
-        prefix.appendSpace()
-            .append(name.color(if (role == Role.Warden) NamedTextColor.WHITE else NamedTextColor.GRAY))
+        player.rankAndName()
             .append(Component.text(": ")
                 .color(if (role == Role.Warden) NamedTextColor.RED else NamedTextColor.GRAY)
                 .append(message))

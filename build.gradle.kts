@@ -10,6 +10,8 @@ version = "0.1.0"
 
 repositories {
     mavenCentral()
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://jitpack.io/")
     mavenLocal()
@@ -20,6 +22,8 @@ dependencies {
     implementation("io.github.honkling.commando:spigot:3.0.4")
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation(kotlin("reflect"))
+
+    compileOnly("com.github.retrooper:packetevents-spigot:2.9.3")
 }
 
 tasks {

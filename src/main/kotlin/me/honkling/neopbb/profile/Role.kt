@@ -27,6 +27,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.Team
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 data class Invite(val player: Player, val role: Role) {
     var taskID: Int? = null
@@ -68,7 +70,10 @@ enum class Role(
     prefix: String,
     val prepare: Player.(Boolean) -> Unit = {}
 ) {
+    @OptIn(ExperimentalTime::class)
     Warden(true, wardenTeam, "<white><gray>[<red>WARDEN</red>]</gray>", {
+        wardenStart = Clock.System.now().epochSeconds
+
         for (player in Bukkit.getOnlinePlayers()) {
             if (player != warden && player.role.isAuthority) {
                 player.role = Prisoner

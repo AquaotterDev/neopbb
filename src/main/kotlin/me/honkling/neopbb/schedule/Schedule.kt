@@ -101,7 +101,7 @@ internal fun tickSchedule() {
             player.sendTitlePart(TitlePart.SUBTITLE, Component.empty())
         }
 
-        if (period == Period.RollCall && !player.attendedRollCall) {
+        if (period == Period.RollCall && !player.attendedRollCall && !player.role.isAuthority) {
             player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                 Duration.ZERO,
                 Duration.ofSeconds(20L),
@@ -111,7 +111,7 @@ internal fun tickSchedule() {
             player.sendTitlePart(TitlePart.SUBTITLE, "<red>Go to the red sand or you'll be killed!".mm)
         }
 
-        if (period == Period.Lockdown || period == Period.LightsOut) {
+        if ((period == Period.Lockdown || period == Period.LightsOut) && !player.role.isAuthority) {
             player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                 Duration.ZERO,
                 Duration.ofSeconds(20L),

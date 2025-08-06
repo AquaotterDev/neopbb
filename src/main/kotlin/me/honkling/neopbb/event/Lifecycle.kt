@@ -20,6 +20,7 @@ import me.honkling.neopbb.profile.respawnTask
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.warden
 import me.honkling.neopbb.profile.wardenCooldown
+import me.honkling.neopbb.refreshTab
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
@@ -39,8 +40,8 @@ private fun onJoin(event: PlayerJoinEvent) {
         player.role = Role.Solitary
 
     player.prepare(true)
-
     event.joinMessage("<p><s>${player.name}</s> is now in prison.".mm)
+    refreshTab()
 }
 
 private fun onQuit(event: PlayerQuitEvent) {
@@ -55,6 +56,7 @@ private fun onQuit(event: PlayerQuitEvent) {
 
     player.cleanUp()
     event.quitMessage("<p><s>${player.name}</s> has ran off.".mm)
+    refreshTab()
 }
 
 private fun onDeath(event: PlayerDeathEvent) {
@@ -97,6 +99,7 @@ private fun onRespawn(event: PlayerPostRespawnEvent) {
 
         if (ticks <= 0L) {
             player.forceRespawn()
+            refreshTab()
             return@scheduleSyncRepeatingTask
         }
 
@@ -107,6 +110,8 @@ private fun onRespawn(event: PlayerPostRespawnEvent) {
             player.teleport(if (player.inSolitary) currentPrison.solitary
                 else currentPrison.respawn)
     }, 0L, 1L)
+
+    refreshTab()
 }
 
 private fun onCancelSpectate(event: PlayerStopSpectatingEntityEvent) {

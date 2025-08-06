@@ -20,6 +20,10 @@ val miniMessage = MiniMessage.builder()
     )).build()
 
 val String.mm: Component
-    get() = miniMessage.deserialize(this)
+    get() = mm()
+
+fun String.mm(vararg resolvers: TagResolver): Component {
+    return miniMessage.deserialize(this, *resolvers)
         .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
         .colorIfAbsent(NamedTextColor.WHITE)
+}
