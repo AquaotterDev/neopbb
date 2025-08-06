@@ -17,6 +17,7 @@ import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.solitaryTask
 import me.honkling.neopbb.profile.warden
+import me.honkling.neopbb.profile.wardenCooldown
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -26,6 +27,9 @@ import kotlin.time.ExperimentalTime
 private fun warden(player: Player) {
     if (warden != null)
         return player.sendMessage("<p>There is already a warden.".mm)
+
+    if (wardenCooldown > 0)
+        return player.sendMessage("<p>You must wait before you can become the warden.".mm)
 
     player.role = Role.Warden
     player.prepare(true)
