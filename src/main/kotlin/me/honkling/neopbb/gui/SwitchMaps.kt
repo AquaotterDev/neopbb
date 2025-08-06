@@ -5,6 +5,7 @@ import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.switchMap
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -16,7 +17,11 @@ import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
 
 class SwitchMaps {
-    val inventory = Bukkit.createInventory(null, ceil(prisonsToml.prisons.size / 9.0).toInt() * 9)
+    val inventory = Bukkit.createInventory(
+        null,
+        ceil(prisonsToml.prisons.size / 9.0).toInt() * 9,
+        Component.text("Switch Maps")
+    )
 
     class EventNode(val gui: SwitchMaps, val player: Player) : Listener {
         @EventHandler
