@@ -25,10 +25,22 @@ import org.bukkit.potion.PotionEffectType
 private fun onDeath(event: PlayerDeathEvent) {
     val victim = event.player
     val attacker = event.damageSource.causingEntity as? Player
-        ?: return
 
-    if (!attacker.role.isAuthority || attacker.passengers.isNotEmpty() || attacker.vehicle is Player ||
-        victim.passengers.isNotEmpty() || victim.vehicle is Player)
+    if (victim.passengers.isNotEmpty()) {
+        for (passenger in victim.passengers) {
+            if (passenger is Player) {
+                passenger.handcuffTask?.let { Bukkit.getScheduler().cancelTask(it) }
+                passenger.handcuffTask = null
+            }
+
+            victim.removePassenger(passenger)
+        }
+
+        return
+    }
+
+    if (attacker == null || !attacker.role.isAuthority || attacker.passengers.isNotEmpty() ||
+        attacker.vehicle is Player || victim.vehicle is Player)
         return
 
     val mainItem = attacker.inventory.getItem(EquipmentSlot.HAND)
