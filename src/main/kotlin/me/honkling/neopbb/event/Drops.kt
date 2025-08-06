@@ -89,10 +89,13 @@ private fun onTransfer(event: InventoryClickEvent) {
     if (event.action in listOf(
         SWAP_WITH_CURSOR, HOTBAR_MOVE_AND_READD, HOTBAR_SWAP
     )) {
-        val hotbarItem = player.inventory.getItem(event.hotbarButton) ?: ItemStack(Material.AIR)
+        val hotbarItem = if (event.hotbarButton != -1) player.inventory.getItem(event.hotbarButton)
+            else null
+
+        val hotbarItemBlacklisted = hotbarItem?.let { isBlacklisted(player, it) } ?: false
         val currentItemBlacklisted = currentItem?.let { isBlacklisted(player, it) } ?: false
 
-        if (isBlacklisted(player, hotbarItem) || currentItemBlacklisted) {
+        if (isBlacklisted(player, cursorItem) || hotbarItemBlacklisted || currentItemBlacklisted) {
             event.isCancelled = true
             playNo(player)
         }
