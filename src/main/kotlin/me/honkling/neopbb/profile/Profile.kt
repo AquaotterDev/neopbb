@@ -4,6 +4,8 @@ import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.key.NonPersistentKey
 import me.honkling.neopbb.profile.key.createKey
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.TitlePart
@@ -40,6 +42,10 @@ fun Player.prepare(reset: Boolean) {
         val display = if (role == Role.Warden) "the warden" else "a ${role.name.lowercase()}"
         Bukkit.getServer().sendMessage("<p><s>$name</s> is now $display!".mm)
     }
+
+    playSound(Sound.sound {
+        it.type(Key.key("entity.zombie.break_wooden_door"))
+    })
 
     role.team.addPlayer(this)
     role.prepare(this, reset)
