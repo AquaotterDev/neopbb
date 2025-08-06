@@ -33,7 +33,7 @@ class SwitchMaps {
 
         @EventHandler
         fun onClose(event: InventoryCloseEvent) {
-            if (event.player == player || event.inventory != gui.inventory)
+            if (event.player == player && event.inventory == gui.inventory)
                 HandlerList.unregisterAll(this)
         }
     }

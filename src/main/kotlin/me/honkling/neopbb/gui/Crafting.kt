@@ -26,15 +26,12 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
 
-@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 class Crafting {
     val inventory = Bukkit.createInventory(null, 9, Component.text("Crafting"))
 
     class EventNode(val gui: Crafting, val player: Player) : Listener {
         @EventHandler
         fun onClick(event: InventoryClickEvent) {
-            println("Click!")
-
             if (event.whoClicked != player || event.inventory != gui.inventory)
                 return
 
@@ -47,7 +44,7 @@ class Crafting {
                 }
 
                 player.money -= cost
-                player.inventory.removeItemAnySlot(*ingredients.map { it.second }.toTypedArray())
+                player.inventory.removeItemAnySlot(*ingredients.map { it.second.asQuantity(it.first) }.toTypedArray())
                 player.give(result)
                 player.playSound(Sound.sound {
                     it.type(Key.key("minecraft:entity.item.pickup"))
@@ -55,7 +52,6 @@ class Crafting {
             }
 
             event.isCancelled = true
-            println("Slot: ${event.slot}")
 
             when (event.slot) {
                 0 -> tryCraft(rock, 9 to pebble)
@@ -68,7 +64,7 @@ class Crafting {
 
         @EventHandler
         fun onClose(event: InventoryCloseEvent) {
-            if (event.player == player || event.inventory != gui.inventory)
+            if (event.player == player && event.inventory == gui.inventory)
                 HandlerList.unregisterAll(this)
         }
     }
@@ -105,7 +101,6 @@ class Crafting {
     }
 
     fun Player.openGUI() {
-        println("open open")
         val events = EventNode(this@Crafting, this)
         Bukkit.getPluginManager().registerEvents(events, instance)
         openInventory(this@Crafting.inventory)
