@@ -33,6 +33,8 @@ class Crafting {
     class EventNode(val gui: Crafting, val player: Player) : Listener {
         @EventHandler
         fun onClick(event: InventoryClickEvent) {
+            println("Click!")
+
             if (event.whoClicked != player || event.inventory != gui.inventory)
                 return
 
@@ -103,6 +105,7 @@ class Crafting {
     }
 
     fun Player.openGUI() {
+        println("open open")
         val events = EventNode(this@Crafting, this)
         Bukkit.getPluginManager().registerEvents(events, instance)
         openInventory(this@Crafting.inventory)

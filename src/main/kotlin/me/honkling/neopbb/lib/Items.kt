@@ -125,3 +125,13 @@ class ItemStackBuilder(private val itemStack: ItemStack) {
 fun ItemStack.builder(): ItemStackBuilder {
     return ItemStackBuilder(this)
 }
+
+fun ItemStack.compareWithoutDurability(itemStack: ItemStack): Boolean {
+    val clone = clone()
+    val otherClone = itemStack.clone()
+
+    clone.editMeta(Damageable::class.java) { it.resetDamage() }
+    otherClone.editMeta(Damageable::class.java) { it.resetDamage() }
+
+    return clone.isSimilar(otherClone)
+}
