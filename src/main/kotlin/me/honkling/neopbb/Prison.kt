@@ -9,6 +9,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 lateinit var currentPrison: PrisonsToml.Prison; internal set
+var lastLockdown = 0L
 var lastMapSwitch = 0L
 
 @OptIn(ExperimentalTime::class)

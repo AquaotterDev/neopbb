@@ -4,7 +4,9 @@ package me.honkling.neopbb.event
 
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
+import me.honkling.neopbb.lastLockdown
 import me.honkling.neopbb.lib.mm
+import me.honkling.neopbb.lockdownCooldown
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.purchase
@@ -20,7 +22,10 @@ import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
     val state = event.clickedBlock?.state as? Sign
@@ -37,7 +42,14 @@ private fun onInteract(event: PlayerInteractEvent) {
         }
     else when (lineOne) {
         "Lockdown" -> {
+            val since = Clock.System.now().epochSeconds - lastLockdown
+            val cooldown = 60 * 10
+
+            if (since < cooldown)
+                return player.sendMessage("<p>That's on cooldown! <s>${cooldown - since} seconds</s> left.".mm)
+
             period = Period.Lockdown
+            lastLockdown = Clock.System.now().epochSeconds
             tickSchedule()
         }
         "Switch Maps" -> {
