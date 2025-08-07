@@ -6,6 +6,7 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import me.honkling.commando.spigot.SpigotCommando
 import me.honkling.neopbb.config.prisonsToml
+import me.honkling.neopbb.config.reloadFilterToml
 import me.honkling.neopbb.config.reloadPrisonsToml
 import me.honkling.neopbb.event.packet.PacketInteraction
 import me.honkling.neopbb.schedule.registerScheduler
@@ -37,6 +38,7 @@ class NeoPBB : JavaPlugin() {
         world = Bukkit.getWorlds()[0]
         world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)
 
+        reloadFilterToml()
         reloadPrisonsToml()
         currentPrison = prisonsToml.prisons[0]
 

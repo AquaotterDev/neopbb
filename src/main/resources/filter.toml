@@ -1,0 +1,5 @@
+[[rules]]
+name = "Test"
+input = "Processed"
+matcher = "reallybadword"
+action = { type = "BlockMessage" }

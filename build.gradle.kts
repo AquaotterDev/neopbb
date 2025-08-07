@@ -23,6 +23,7 @@ dependencies {
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation(kotlin("reflect"))
 
+    compileOnly("me.honkling:ruby:0.1.3")
     compileOnly("com.github.retrooper:packetevents-spigot:2.9.3")
 }
 
@@ -42,6 +43,15 @@ tasks {
 
     build {
         dependsOn("shadowJar")
+    }
+
+    shadowJar {
+        dependencies {
+            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7"))
+            exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8"))
+            exclude(dependency("org.jetbrains.kotlin:kotlin-reflect"))
+        }
     }
 
     processResources {
