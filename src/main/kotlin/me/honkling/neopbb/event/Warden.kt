@@ -6,7 +6,9 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lastLockdown
 import me.honkling.neopbb.lib.mm
+import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.purchase
+import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
 import me.honkling.neopbb.schedule.Period
@@ -14,6 +16,7 @@ import me.honkling.neopbb.schedule.period
 import me.honkling.neopbb.schedule.tickSchedule
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
 import org.bukkit.event.player.PlayerInteractEvent
@@ -60,5 +63,14 @@ private fun onInteract(event: PlayerInteractEvent) {
                 player.openGUI()
             }
         }
+    }
+}
+
+private fun onOpenEnderChest(event: PlayerInteractEvent) {
+    val player = event.player
+
+    if (event.clickedBlock?.type == Material.ENDER_CHEST && event.action.isRightClick && player.role.isAuthority) {
+        player.sendMessage("<p>You cannot open your ender chest as a guard.".mm)
+        event.isCancelled = true
     }
 }
