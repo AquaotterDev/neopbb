@@ -72,7 +72,7 @@ val bountyHunterSword = ItemStack(Material.WOODEN_SWORD)
     .lore("Kill players with this sword.")
     .build()
 
-val lumberAxe = ItemStack(Material.STONE_AXE)
+val lumberAxe = ItemStack(Material.WOODEN_AXE)
     .builder()
     .displayName("Lumber Axe".mm)
     .lore("Use this axe to chop logs.")
