@@ -63,6 +63,9 @@ private fun onQuit(event: PlayerQuitEvent) {
 private fun onDeath(event: PlayerDeathEvent) {
     val player = event.player
 
+    if (player.role == Role.Criminal)
+        player.role = Role.Prisoner
+
     val attacker = event.damageSource.causingEntity as? Player
         ?: return
 
