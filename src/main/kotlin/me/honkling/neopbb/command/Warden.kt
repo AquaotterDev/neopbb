@@ -31,6 +31,9 @@ private fun warden(player: Player) {
     if (wardenCooldown > 0)
         return player.sendMessage("<p>You must wait before you can become the warden.".mm)
 
+    if (player.isRespawning)
+        return player.sendMessage("<p>You must wait to respawn.".mm)
+
     player.role = Role.Warden
     player.prepare(true)
 }
