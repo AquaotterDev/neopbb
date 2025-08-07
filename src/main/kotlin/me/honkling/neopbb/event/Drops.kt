@@ -32,7 +32,8 @@ private val blacklistedMaterials = listOf(
     Material.GLASS_BOTTLE,
     Material.IRON_SHOVEL,
     Material.IRON_PICKAXE,
-    Material.BUCKET
+    Material.BUCKET,
+    Material.NETHERITE_BOOTS
 )
 
 private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
