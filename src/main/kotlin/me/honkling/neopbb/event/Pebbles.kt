@@ -12,7 +12,7 @@ import org.bukkit.inventory.EquipmentSlot
 private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
 
-    if (event.clickedBlock?.type?.name?.contains("COBBLESTONE") != true || event.hand == EquipmentSlot.OFF_HAND)
+    if (event.clickedBlock?.type?.name?.contains("COBBLESTONE") != true || event.hand == EquipmentSlot.OFF_HAND || !event.action.isRightClick)
         return
 
     player.give(pebble)
