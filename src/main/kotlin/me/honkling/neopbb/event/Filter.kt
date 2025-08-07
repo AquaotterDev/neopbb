@@ -15,7 +15,6 @@ internal fun runFilter(event: AsyncChatEvent) {
     val player = event.player
     val input = PlainTextComponentSerializer.plainText().serialize(event.message())
     val staff = Audience.audience(Bukkit.getOnlinePlayers().filter { it.hasPermission("neopbb.filter") })
-    var triggered = false
 
     for (rule in filterToml.rules) {
         if (!rule.test(input))
@@ -23,10 +22,7 @@ internal fun runFilter(event: AsyncChatEvent) {
 
         Bukkit.getScheduler().runTask(instance, Runnable {
             rule.action.act(event, rule)
-            triggered = true
+            staff.sendMessage("<p><s>${player.name}</s> triggered chat filter rule <s>${rule.name}</s>:\n<p>$input".mm)
         })
     }
-
-    if (triggered)
-        staff.sendMessage("<p><s>${player.name}</s> triggered the chat filter:\n<p>$input".mm)
 }
