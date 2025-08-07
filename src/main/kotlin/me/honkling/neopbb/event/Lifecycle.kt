@@ -39,6 +39,7 @@ private fun onJoin(event: PlayerJoinEvent) {
     if (player.inSolitary)
         player.role = Role.Solitary
 
+    player.gameMode = GameMode.ADVENTURE
     player.prepare(true)
     event.joinMessage("<p><s>${player.name}</s> is now in prison.".mm)
     refreshTab()

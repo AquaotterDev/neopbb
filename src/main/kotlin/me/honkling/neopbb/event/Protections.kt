@@ -12,6 +12,8 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.hanging.HangingBreakByEntityEvent
+import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 private fun onBlockPlace(event: BlockPlaceEvent) {
@@ -24,7 +26,7 @@ private fun onBlockBreak(event: BlockBreakEvent) {
         event.isCancelled = true
 }
 
-private fun onPunchPainting(event: EntityDamageEvent) {
+private fun onPunchPainting(event: HangingBreakEvent) {
     val entity = event.entity
 
     if (entity.type != EntityType.PAINTING && entity.type != EntityType.ITEM_FRAME && entity.type != EntityType.GLOW_ITEM_FRAME)
@@ -32,8 +34,8 @@ private fun onPunchPainting(event: EntityDamageEvent) {
 
     event.isCancelled = true
 
-    if (event is EntityDamageByEntityEvent) {
-        val attacker = event.damageSource.causingEntity as? Player
+    if (event is HangingBreakByEntityEvent) {
+        val attacker = event.remover as? Player
 
         if (attacker?.gameMode == GameMode.CREATIVE)
             event.isCancelled = false
