@@ -13,6 +13,7 @@ import me.honkling.neopbb.profile.forceRespawn
 import me.honkling.neopbb.profile.inSolitary
 import me.honkling.neopbb.profile.invite
 import me.honkling.neopbb.profile.isRespawning
+import me.honkling.neopbb.profile.lastWarden
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.solitaryTask
@@ -36,6 +37,10 @@ private fun warden(player: Player) {
     if (player.isRespawning)
         return player.sendMessage("<p>You must wait to respawn.".mm)
 
+    if (lastWarden == player)
+        return player.sendMessage("<p>You cannot be the warden a second time.".mm)
+
+    lastWarden = player
     player.role = Role.Warden
     player.prepare(true)
 }
