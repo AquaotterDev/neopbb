@@ -6,6 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.lib.honeyBottle
 import me.honkling.neopbb.lib.legalGoldenApple
 import me.honkling.neopbb.lib.milk
+import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.lib.nauseaPotion
 import me.honkling.neopbb.lib.soup
 import me.honkling.neopbb.lib.steak
@@ -34,6 +35,11 @@ private fun onInteract(event: PlayerInteractEvent) {
             player.role = Role.Criminal
             player.prepare(false)
         }
-        "Restore Kit" -> player.prepare(false)
+        "Restore Kit" -> {
+            if (!player.role.isAuthority)
+                return player.sendMessage("<p>Only guards can restore their kit.".mm)
+
+            player.prepare(true)
+        }
     }
 }
