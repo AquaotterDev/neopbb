@@ -16,4 +16,5 @@ private fun accept(player: Player) {
     player.role = invite.role
     player.prepare(true)
     invite.cancel()
+    player.invite = null
 }
