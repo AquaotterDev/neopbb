@@ -1,6 +1,8 @@
 package me.honkling.neopbb.lib
 
+import me.honkling.neopbb.event.miningOres
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Color
 import org.bukkit.Material
@@ -64,6 +66,37 @@ val scrapMetal = ItemStack(Material.RAW_IRON)
     .displayName("Scrap Metal <red>[CONTRABAND]".mm)
     .build()
 
+val bountyHunterSword = ItemStack(Material.WOODEN_SWORD)
+    .builder()
+    .displayName("Bounty Hunter Sword".mm)
+    .lore("Kill players with this sword.")
+    .build()
+
+val lumberAxe = ItemStack(Material.STONE_AXE)
+    .builder()
+    .displayName("Lumber Axe".mm)
+    .lore("Use this axe to chop logs.")
+    .canDestroy(Material.SPRUCE_LOG)
+    .build()
+
+val plumbingStick = ItemStack(Material.CARROT_ON_A_STICK)
+    .builder()
+    .displayName("Plumbing Stick".mm)
+    .lore("Use this stick to clean iron trapdoors.")
+    .build()
+
+val miningPickaxe = ItemStack(Material.IRON_PICKAXE)
+    .builder()
+    .lore("Use this pickaxe to mine ores.")
+    .canDestroy(*miningOres.keys.toTypedArray())
+    .build()
+
+val shovel = ItemStack(Material.IRON_SHOVEL)
+    .builder()
+    .lore("Use this to shovel dirt.")
+    .canDestroy(Material.COARSE_DIRT)
+    .build()
+
 val cloak = ItemStack(Material.LEATHER_CHESTPLATE)
     .builder()
     .displayName("Cloak <red>[CONTRABAND]".mm)
@@ -99,7 +132,9 @@ class ItemStackBuilder(private val itemStack: ItemStack) {
         return this
     }
 
-    fun lore(vararg lines: String) = lore(*lines.map { Component.text(it) }.toTypedArray())
+    fun lore(vararg lines: String) = lore(*lines.map { Component.text(it)
+        .decoration(TextDecoration.ITALIC, false)
+        .color(NamedTextColor.WHITE) }.toTypedArray())
     fun lore(vararg lines: Component): ItemStackBuilder {
         meta.lore(lines.toMutableList())
         return this
