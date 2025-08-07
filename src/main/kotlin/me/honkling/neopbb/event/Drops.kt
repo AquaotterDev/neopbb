@@ -38,7 +38,8 @@ private val blacklistedMaterials = listOf(
 private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
-    { _, it -> it.type == Material.DIAMOND_SWORD && it.enchantments.containsKey(Enchantment.SHARPNESS) }
+    { _, it -> it.type == Material.DIAMOND_SWORD && it.enchantments.containsKey(Enchantment.SHARPNESS) },
+    { player, _ -> player.role.isAuthority }
 )
 
 private fun onDrop(event: PlayerDropItemEvent) {
