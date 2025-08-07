@@ -19,6 +19,7 @@ import me.honkling.neopbb.profile.solitaryTask
 import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
 import me.honkling.neopbb.profile.wardenCooldown
+import me.honkling.neopbb.refreshTab
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

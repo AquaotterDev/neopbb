@@ -4,6 +4,7 @@ import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.key.NonPersistentKey
 import me.honkling.neopbb.profile.key.createKey
+import me.honkling.neopbb.refreshTab
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
@@ -49,6 +50,7 @@ fun Player.prepare(reset: Boolean) {
 
     role.team.addPlayer(this)
     role.prepare(this, reset)
+    refreshTab()
 }
 
 fun Player.forceRespawn() {
