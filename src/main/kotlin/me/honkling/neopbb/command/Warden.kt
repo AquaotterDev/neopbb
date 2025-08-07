@@ -16,6 +16,7 @@ import me.honkling.neopbb.profile.isRespawning
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.solitaryTask
+import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
 import me.honkling.neopbb.profile.wardenCooldown
 import org.bukkit.Bukkit
@@ -48,6 +49,9 @@ private fun hire(player: Player, target: Player, role: Role) {
     if (target.invite != null)
         return player.sendMessage("<p><s>${target.name}</s> already has an ongoing invitation.".mm)
 
+    if (role == Role.Swat && !swatUnlocked)
+        return player.sendMessage("<p>You don't have SWAT Guards unlocked!".mm)
+
     player.sendMessage("<p><s>${target.name}</s> has been sent an invitation.".mm)
     target.sendMessage("\n<p>The warden wants you to be a guard!\n<p><s><u><click:run_command:/accept>Accept</s>\n".mm)
     target.invite = Invite(target, role).schedule()
@@ -60,7 +64,7 @@ private fun `hire$complete`(sender: CommandSender, node: ParameterNode<Command>,
             .map { it.name }
             .filter { it.contains(input, true) }
         "role" -> Role.entries
-            .filter { it.isAuthority && it != Role.Warden }
+            .filter { it.isAuthority && it != Role.Warden && (it != Role.Swat || swatUnlocked) }
             .map { it.name }
             .filter { it.contains(input, true) }
         else -> emptyList()
