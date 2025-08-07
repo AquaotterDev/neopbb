@@ -15,6 +15,8 @@ import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -33,6 +35,17 @@ val miningOres = mutableMapOf(
     Material.DEEPSLATE_REDSTONE_ORE to 10.0f,
     Material.REDSTONE_ORE to 10.0f
 )
+
+private fun onDamage(event: EntityDamageEvent) {
+    val player = event.entity as? Player ?: return
+    val damager = (event as? EntityDamageByEntityEvent)?.damager as? Player ?: return
+    val item = damager.inventory.itemInMainHand
+
+    if (item.compareWithoutDurability(lumberAxe) || item.compareWithoutDurability(miningPickaxe)) {
+        player.sendMessage("<p>You can't use that job item to fight people!".mm)
+        event.isCancelled = true
+    }
+}
 
 private fun onBreak(event: BlockBreakEvent) {
     val player = event.player
