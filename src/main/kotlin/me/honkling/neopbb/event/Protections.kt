@@ -6,9 +6,12 @@ import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
 import io.papermc.paper.event.player.PlayerOpenSignEvent
 import me.honkling.commando.spigot.event.Listener
 import org.bukkit.GameMode
-import org.bukkit.Material
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 private fun onBlockPlace(event: BlockPlaceEvent) {
@@ -19,6 +22,22 @@ private fun onBlockPlace(event: BlockPlaceEvent) {
 private fun onBlockBreak(event: BlockBreakEvent) {
     if (event.player.gameMode != GameMode.CREATIVE)
         event.isCancelled = true
+}
+
+private fun onPunchPainting(event: EntityDamageEvent) {
+    val entity = event.entity
+
+    if (entity.type != EntityType.PAINTING && entity.type != EntityType.ITEM_FRAME && entity.type != EntityType.GLOW_ITEM_FRAME)
+        return
+
+    event.isCancelled = true
+
+    if (event is EntityDamageByEntityEvent) {
+        val attacker = event.damageSource.causingEntity as? Player
+
+        if (attacker?.gameMode == GameMode.CREATIVE)
+            event.isCancelled = false
+    }
 }
 
 private fun onFlipBlock(event: PlayerInteractEvent) {
