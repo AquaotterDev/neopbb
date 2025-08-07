@@ -28,7 +28,7 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     val side = state.getSide(Side.FRONT)
     val lineOne = PlainTextComponentSerializer.plainText().serialize(side.line(1))
-    val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(1))
+    val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(2))
 
     if (lineTwo == "SWAT Guards")
         player.purchase(2500f, swatUnlocked) {
