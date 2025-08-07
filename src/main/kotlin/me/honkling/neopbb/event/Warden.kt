@@ -57,6 +57,15 @@ private fun onInteract(event: PlayerInteractEvent) {
             if (player != warden)
                 return player.sendMessage("<p>Only the warden can switch maps.".mm)
 
+            val since = Clock.System.now().epochSeconds - lastLockdown
+            val cooldown = 60 * 3
+
+            if (since < cooldown) {
+                val remaining = cooldown - since
+                val unit = if (remaining == 1L) "second" else "seconds"
+                return player.sendMessage("<p>That's on cooldown! <s>$remaining $unit</s> left.".mm)
+            }
+
             val gui = SwitchMaps()
 
             with (gui) {
