@@ -91,7 +91,7 @@ enum class Role(
             it.type(Key.key("minecraft:block.end_portal.spawn"))
         })
 
-        swatUnlocked = true
+        swatUnlocked = false
 
         val sword = ItemStack(Material.DIAMOND_SWORD)
             .builder()

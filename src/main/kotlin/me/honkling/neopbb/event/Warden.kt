@@ -6,11 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lastLockdown
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.lockdownCooldown
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.purchase
-import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.swatUnlocked
 import me.honkling.neopbb.profile.warden
 import me.honkling.neopbb.schedule.Period
@@ -20,7 +16,6 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
-import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
