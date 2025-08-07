@@ -2,6 +2,7 @@ package me.honkling.neopbb.schedule
 
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.mm
+import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.attendedRollCall
 import me.honkling.neopbb.profile.money
 import me.honkling.neopbb.profile.role
@@ -75,7 +76,7 @@ internal fun tickSchedule() {
     }
 
     if (oldPeriod == Period.RollCall && periodChanged) {
-        val guiltyPeople = Bukkit.getOnlinePlayers().filter { !it.attendedRollCall && !it.role.isAuthority }
+        val guiltyPeople = Bukkit.getOnlinePlayers().filter { !it.attendedRollCall && it.role == Role.Prisoner }
 
         if (guiltyPeople.isEmpty()) {
             warden?.money += 1000
