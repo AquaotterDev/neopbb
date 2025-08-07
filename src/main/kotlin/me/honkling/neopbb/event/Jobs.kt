@@ -42,7 +42,7 @@ private fun onDamage(event: EntityDamageEvent) {
     val item = damager.inventory.itemInMainHand
 
     if (item.compareWithoutDurability(lumberAxe) || item.compareWithoutDurability(miningPickaxe)) {
-        player.sendMessage("<p>You can't use that job item to fight people!".mm)
+        damager.sendMessage("<p>You can't use that job item to fight people!".mm)
         event.isCancelled = true
     }
 }
