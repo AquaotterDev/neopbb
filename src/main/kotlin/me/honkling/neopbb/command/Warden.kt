@@ -128,3 +128,14 @@ private fun release(sender: Player, player: Player) {
         player.forceRespawn()
     else player.prepare(true)
 }
+
+private fun help(sender: CommandSender) {
+    sender.sendMessage("""
+        <p>Here are the commands you can run:
+        <p><s>/warden</s> - Become the warden if there is none.
+        <p><s>/warden hire (player) <nurse/guard/swat></s> - Hire a guard.
+        <p><s>/warden fire (player)</s> - Fire a guard.
+        <p><s>/warden solitary (player)</s> - Put a player into solitary.
+        <p><s>/warden release (player)</s> - Release a player from solitary.
+    """.trimIndent().mm)
+}
