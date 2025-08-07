@@ -131,7 +131,7 @@ private fun onPlumbing(event: PlayerInteractEvent) {
     val offItem = player.inventory.getItem(hand.oppositeHand).asOne()
     if (!mainItem.compareWithoutDurability(plumbingStick)
         || (offItem.compareWithoutDurability(plumbingStick) && hand != EquipmentSlot.HAND)
-        || block.type != Material.IRON_TRAPDOOR)
+        || block.type != Material.IRON_TRAPDOOR || player.getCooldown(Material.CARROT_ON_A_STICK) > 0)
         return
 
     player.money += 0.5f
