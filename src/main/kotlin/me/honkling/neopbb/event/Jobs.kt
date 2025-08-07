@@ -62,6 +62,10 @@ private fun onBreak(event: BlockBreakEvent) {
         player.sendMessage("<s>+$2</s> for cutting wood".mm)
         player.playSound(yes)
         player.money += 2
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
+            block.type = type
+        }, 20L * 10)
     }
 
     if (itemStack.compareWithoutDurability(miningPickaxe) && type in miningOres) {
