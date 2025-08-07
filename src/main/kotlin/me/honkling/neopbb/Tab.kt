@@ -19,7 +19,7 @@ import kotlin.time.ExperimentalTime
 fun refreshTab() {
     val players = Bukkit.getOnlinePlayers()
     val prisoners = players.filter { !it.role.isAuthority }
-    val guards = players.filter { it.role.isAuthority }
+    val guards = players.filter { it.role.isAuthority && it.role != Role.Warden }
 
     val noDamage = if ((warden?.noDamageTicks ?: -1) > 0)
         " <aqua>[${warden!!.noDamageTicks / 20}s of No-Damage]</aqua>"
