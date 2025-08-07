@@ -5,6 +5,7 @@ package me.honkling.neopbb.event
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lastLockdown
+import me.honkling.neopbb.lastMapSwitch
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.purchase
@@ -57,7 +58,7 @@ private fun onInteract(event: PlayerInteractEvent) {
             if (player != warden)
                 return player.sendMessage("<p>Only the warden can switch maps.".mm)
 
-            val since = Clock.System.now().epochSeconds - lastLockdown
+            val since = Clock.System.now().epochSeconds - lastMapSwitch
             val cooldown = 60 * 3
 
             if (since < cooldown) {
