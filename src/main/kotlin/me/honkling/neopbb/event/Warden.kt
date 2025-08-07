@@ -40,8 +40,11 @@ private fun onInteract(event: PlayerInteractEvent) {
             val since = Clock.System.now().epochSeconds - lastLockdown
             val cooldown = 60 * 10
 
-            if (since < cooldown)
-                return player.sendMessage("<p>That's on cooldown! <s>${cooldown - since} seconds</s> left.".mm)
+            if (since < cooldown) {
+                val remaining = cooldown - since
+                val unit = if (remaining == 1L) "second" else "seconds"
+                return player.sendMessage("<p>That's on cooldown! <s>$remaining $unit</s> left.".mm)
+            }
 
             period = Period.Lockdown
             lastLockdown = Clock.System.now().epochSeconds
