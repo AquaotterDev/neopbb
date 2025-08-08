@@ -57,8 +57,10 @@ private fun onDamage(event: EntityDamageEvent) {
         event.isCancelled = true
     }
 
-    if (item.compareWithoutDurability(bountyHunterSword) && player.role.isAuthority)
-        return damager.sendMessage("<p>You can't use job items to hurt guards!".mm)
+    if (item.compareWithoutDurability(bountyHunterSword) && player.role.isAuthority) {
+        event.isCancelled = true
+        damager.sendMessage("<p>You can't use job items to hurt guards!".mm)
+    }
 }
 
 private fun onBreak(event: BlockBreakEvent) {
