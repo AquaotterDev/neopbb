@@ -4,6 +4,7 @@ package me.honkling.neopbb.command
 
 import me.honkling.commando.common.command.node.ParameterNode
 import me.honkling.commando.spigot.command.Command
+import me.honkling.neopbb.config.reloadConfigToml
 import me.honkling.neopbb.config.reloadFilterToml
 import me.honkling.neopbb.config.reloadPrisonsToml
 import me.honkling.neopbb.lib.mm
@@ -11,6 +12,10 @@ import org.bukkit.command.CommandSender
 
 private fun config(sender: CommandSender, config: String) {
     when (config) {
+        "main" -> {
+            reloadConfigToml()
+            sender.sendMessage("<p>Reloaded the main configuration.".mm)
+        }
         "filter" -> {
             reloadFilterToml()
             sender.sendMessage("<p>Reloaded the filter configuration.".mm)

@@ -40,7 +40,6 @@ data class FilterToml(
             val message: String
         ) : Action {
             override fun act(event: AsyncChatEvent, rule: Rule) {
-                event.isCancelled = true
                 event.player.sendMessage("<p>$message".mm)
             }
         }
@@ -49,7 +48,6 @@ data class FilterToml(
             val id: String
         ) : Action {
             override fun act(event: AsyncChatEvent, rule: Rule) {
-                event.isCancelled = true
                 val reason = requireNotNull(punishmentsToml.reasons[id]) { "Failed to find punishment reason '$id'" }
                 val message = PlainTextComponentSerializer.plainText().serialize(event.message())
                 issuePunishment(

@@ -20,6 +20,8 @@ internal fun runFilter(event: AsyncChatEvent) {
         if (!rule.test(input))
             continue
 
+        event.isCancelled = true
+
         Bukkit.getScheduler().runTask(instance, Runnable {
             rule.action.act(event, rule)
             staff.sendMessage("<p><s>${player.name}</s> triggered chat filter rule <s>${rule.name}</s>:\n<p>$input".mm)
