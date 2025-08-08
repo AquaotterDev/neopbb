@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
 
 val miningOres = mutableMapOf(
     Material.DEEPSLATE_COPPER_ORE to 7.5f,
@@ -108,10 +109,32 @@ private fun onDeath(event: PlayerDeathEvent) {
     }
 }
 
-private fun onPlumbing(event: PlayerInteractEvent) {
+private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
     val hand = event.hand ?: return
     val block = event.clickedBlock ?: return
+
+    if (block.type == Material.TRAPPED_CHEST) {
+        event.isCancelled = true
+        player.inventory.addItem(ItemStack(Material.COD))
+    }
+
+    if (block.type == Material.BLAST_FURNACE && event.item?.type == Material.COD && player.getCooldown(Material.COD) <= 0) {
+        event.item!!.amount--
+        player.setCooldown(Material.COD, 2)
+        player.playSound(Sound.sound {
+            it.type(Key.key("block.blastfurnace.fire_crackle"))
+        })
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
+            player.playSound(Sound.sound {
+                it.type(Key.key("block.note_block.basedrum"))
+                it.volume(0.75f)
+                it.pitch(1.75f)
+            })
+            player.money += 2
+        }, 20L * 4)
+    }
 
     val state = block.state as? Sign
     if (state != null) {
