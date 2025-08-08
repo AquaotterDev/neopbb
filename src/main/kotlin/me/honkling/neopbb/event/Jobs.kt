@@ -164,8 +164,8 @@ private fun onInteract(event: PlayerInteractEvent) {
         || block.type != Material.IRON_TRAPDOOR || player.getCooldown(Material.CARROT_ON_A_STICK) > 0)
         return
 
-    player.money += 0.5f
-    player.setCooldown(Material.CARROT_ON_A_STICK, 10)
+    player.money += 2.5f
+    player.setCooldown(Material.CARROT_ON_A_STICK, 4)
     player.playSound(Sound.sound {
         it.type(Key.key("block.note_block.basedrum"))
         it.volume(0.75f)
