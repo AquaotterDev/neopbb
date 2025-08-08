@@ -55,6 +55,7 @@ private fun onQuit(event: PlayerQuitEvent) {
         wardenCooldown = 20 * 5
     }
 
+    player.forceRespawn()
     player.cleanUp()
     event.quitMessage("<p><s>${player.name}</s> has ran off.".mm)
     refreshTab()
