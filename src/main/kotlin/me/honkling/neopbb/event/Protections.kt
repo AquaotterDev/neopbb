@@ -2,6 +2,7 @@
 
 package me.honkling.neopbb.event
 
+import io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
 import io.papermc.paper.event.player.PlayerOpenSignEvent
 import me.honkling.commando.spigot.event.Listener
@@ -10,8 +11,6 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -48,6 +47,11 @@ private fun onFlipBlock(event: PlayerInteractEvent) {
         ?: return
 
     if (blacklist.any { it in type.name } && event.player.gameMode != GameMode.CREATIVE)
+        event.isCancelled = true
+}
+
+private fun onTakeFlowerPot(event: PlayerFlowerPotManipulateEvent) {
+    if (event.player.gameMode != GameMode.CREATIVE)
         event.isCancelled = true
 }
 
