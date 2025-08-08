@@ -87,7 +87,8 @@ enum class Role(
         val server = Bukkit.getServer()
 
         world.getEntitiesByClass(Item::class.java).forEach(Entity::remove)
-        server.sendTitlePart(TitlePart.TITLE, "<s>$name</s> is the new warden!".mm)
+        server.sendTitlePart(TitlePart.TITLE, "<s>$name</s>".mm)
+        server.sendTitlePart(TitlePart.SUBTITLE, "is the new warden!".mm)
         server.playSound(Sound.sound {
             it.type(Key.key("minecraft:block.end_portal.spawn"))
         })
