@@ -6,6 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.*
 import me.honkling.neopbb.profile.money
+import me.honkling.neopbb.profile.role
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -44,10 +45,14 @@ private fun onDamage(event: EntityDamageEvent) {
     val damager = (event as? EntityDamageByEntityEvent)?.damager as? Player ?: return
     val item = damager.inventory.itemInMainHand
 
-    if (item.compareWithoutDurability(lumberAxe) || item.compareWithoutDurability(miningPickaxe)) {
+    if (item.compareWithoutDurability(lumberAxe) || item.compareWithoutDurability(miningPickaxe)
+        || item.compareWithoutDurability(shovel)) {
         damager.sendMessage("<p>You can't use that job item to fight people!".mm)
         event.isCancelled = true
     }
+
+    if (item.compareWithoutDurability(bountyHunterSword) && player.role.isAuthority)
+        return damager.sendMessage("<p>You can't use job items to hurt guards!".mm)
 }
 
 private fun onBreak(event: BlockBreakEvent) {
@@ -80,7 +85,7 @@ private fun onBreak(event: BlockBreakEvent) {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
             block.type = type
-        }, 20L * 10)
+        }, 20L * 8)
     }
 
     if (itemStack.compareWithoutDurability(shovel) && type == Material.COARSE_DIRT) {

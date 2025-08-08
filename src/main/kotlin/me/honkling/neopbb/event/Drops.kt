@@ -3,6 +3,8 @@
 package me.honkling.neopbb.event
 
 import me.honkling.commando.spigot.event.Listener
+import me.honkling.neopbb.lib.compareWithoutDurability
+import me.honkling.neopbb.lib.miningPickaxe
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.key.Key
@@ -31,7 +33,6 @@ private val blacklistedMaterials = listOf(
     Material.STONE_BUTTON,
     Material.GLASS_BOTTLE,
     Material.IRON_SHOVEL,
-    Material.IRON_PICKAXE,
     Material.BUCKET,
     Material.NETHERITE_BOOTS,
     Material.DIAMOND_SWORD
@@ -40,7 +41,8 @@ private val blacklistedMaterials = listOf(
 private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
-    { player, _ -> player.role == Role.Warden }
+    { player, _ -> player.role == Role.Warden },
+    { _, it -> it.compareWithoutDurability(miningPickaxe) }
 )
 
 private fun onDrop(event: PlayerDropItemEvent) {
