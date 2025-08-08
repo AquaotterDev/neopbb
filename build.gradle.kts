@@ -21,6 +21,7 @@ dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation("io.github.honkling.commando:spigot:3.0.4")
     implementation("com.github.honkling:4koma-regex:1.3.0")
+    implementation("dev.kord:kord-core:0.15.0")
     implementation(kotlin("reflect"))
 
     compileOnly("me.honkling:ruby:0.1.3")

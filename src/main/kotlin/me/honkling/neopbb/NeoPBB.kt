@@ -4,10 +4,14 @@ import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.PacketEventsAPI
 import com.github.retrooper.packetevents.event.PacketListenerPriority
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.honkling.commando.spigot.SpigotCommando
 import me.honkling.neopbb.config.prisonsToml
 import me.honkling.neopbb.config.reloadFilterToml
 import me.honkling.neopbb.config.reloadPrisonsToml
+import me.honkling.neopbb.discord.initializeKord
 import me.honkling.neopbb.event.packet.PacketInteraction
 import me.honkling.neopbb.schedule.registerScheduler
 import me.honkling.neopbb.task.registerTasks
@@ -18,6 +22,8 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 
 val instance = JavaPlugin.getPlugin(NeoPBB::class.java)
+val scope = CoroutineScope(Dispatchers.IO)
+
 lateinit var world: World; private set
 lateinit var packetEvents: PacketEventsAPI<Plugin>; private set
 
@@ -44,6 +50,10 @@ class NeoPBB : JavaPlugin() {
 
         registerScheduler()
         registerTasks()
+
+        scope.launch {
+            initializeKord()
+        }
 
         val commando = SpigotCommando(this)
         val packetInteraction = PacketInteraction(commando)
