@@ -1,5 +1,6 @@
 package me.honkling.neopbb.lib
 
+import me.honkling.neopbb.event.lumberLogs
 import me.honkling.neopbb.event.miningOres
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -76,7 +77,7 @@ val lumberAxe = ItemStack(Material.WOODEN_AXE)
     .builder()
     .displayName("Lumber Axe".mm)
     .lore("Use this axe to chop logs.")
-    .canDestroy(Material.SPRUCE_LOG)
+    .canDestroy(*lumberLogs.toTypedArray())
     .build()
 
 val plumbingStick = ItemStack(Material.CARROT_ON_A_STICK)

@@ -36,6 +36,8 @@ val miningOres = mutableMapOf(
     Material.REDSTONE_ORE to 10.0f
 )
 
+val lumberLogs = Material.entries.filter { "LOG" in it.name }
+
 private fun onDamage(event: EntityDamageEvent) {
     val player = event.entity as? Player ?: return
     val damager = (event as? EntityDamageByEntityEvent)?.damager as? Player ?: return
@@ -57,7 +59,7 @@ private fun onBreak(event: BlockBreakEvent) {
         it.pitch(2f)
     }
 
-    if (itemStack.compareWithoutDurability(lumberAxe) && type == Material.SPRUCE_LOG) {
+    if (itemStack.compareWithoutDurability(lumberAxe) && type in lumberLogs) {
         block.type = Material.STRIPPED_SPRUCE_LOG
         player.sendMessage("<s>+$2</s> for cutting wood".mm)
         player.playSound(yes)
