@@ -23,6 +23,12 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 
+private val yes = Sound.sound {
+    it.type(Key.key("block.note_block.basedrum"))
+    it.volume(0.75f)
+    it.pitch(1.75f)
+}
+
 val miningOres = mutableMapOf(
     Material.DEEPSLATE_COPPER_ORE to 7.5f,
     Material.COPPER_ORE to 7.5f,
@@ -60,10 +66,6 @@ private fun onBreak(event: BlockBreakEvent) {
     val itemStack = player.inventory.itemInMainHand
     val block = event.block
     val type = block.type
-    val yes = Sound.sound {
-        it.type(Key.key("block.note_block.pling"))
-        it.pitch(2f)
-    }
 
     if (itemStack.compareWithoutDurability(lumberAxe) && type in lumberLogs) {
         block.type = Material.STRIPPED_SPRUCE_LOG
@@ -107,10 +109,7 @@ private fun onDeath(event: PlayerDeathEvent) {
     if (attacker.inventory.itemInMainHand.compareWithoutDurability(bountyHunterSword)) {
         attacker.money += 100
         attacker.sendMessage("<s>+$100</s> for killing somebody".mm)
-        attacker.playSound(Sound.sound {
-            it.type(Key.key("minecraft:block.note_block.pling"))
-            it.pitch(2f)
-        })
+        attacker.playSound(yes)
     }
 }
 
@@ -127,16 +126,10 @@ private fun onInteract(event: PlayerInteractEvent) {
     if (block.type == Material.BLAST_FURNACE && event.item?.type == Material.COD && player.getCooldown(Material.COD) <= 0) {
         event.item!!.amount--
         player.setCooldown(Material.COD, 2)
-        player.playSound(Sound.sound {
-            it.type(Key.key("block.blastfurnace.fire_crackle"))
-        })
+        player.playSound(yes)
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
-            player.playSound(Sound.sound {
-                it.type(Key.key("block.note_block.basedrum"))
-                it.volume(0.75f)
-                it.pitch(1.75f)
-            })
+            player.playSound()
             player.money += 2
         }, 20L * 4)
     }
@@ -166,9 +159,5 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     player.money += 2.5f
     player.setCooldown(Material.CARROT_ON_A_STICK, 4)
-    player.playSound(Sound.sound {
-        it.type(Key.key("block.note_block.basedrum"))
-        it.volume(0.75f)
-        it.pitch(1.75f)
-    })
+    player.playSound(yes)
 }
