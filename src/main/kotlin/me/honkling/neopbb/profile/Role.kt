@@ -73,6 +73,7 @@ enum class Role(
     @OptIn(ExperimentalTime::class)
     Warden(true, wardenTeam, "<white><gray>[<red>WARDEN</red>]</gray>", {
         wardenStart = Clock.System.now().epochSeconds
+        noDamageTicks = 20 * 30
 
         for (player in Bukkit.getOnlinePlayers()) {
             if (player != warden && player.role.isAuthority) {
