@@ -33,13 +33,13 @@ private val blacklistedMaterials = listOf(
     Material.IRON_SHOVEL,
     Material.IRON_PICKAXE,
     Material.BUCKET,
-    Material.NETHERITE_BOOTS
+    Material.NETHERITE_BOOTS,
+    Material.DIAMOND_SWORD
 )
 
 private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
-    { _, it -> it.type == Material.DIAMOND_SWORD && it.enchantments.containsKey(Enchantment.SHARPNESS) },
     { player, _ -> player.role == Role.Warden }
 )
 
