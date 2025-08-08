@@ -40,7 +40,7 @@ private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
     { _, it -> it.type == Material.DIAMOND_SWORD && it.enchantments.containsKey(Enchantment.SHARPNESS) },
-    { player, _ -> player.role.isAuthority }
+    { player, _ -> player.role == Role.Warden }
 )
 
 private fun onDrop(event: PlayerDropItemEvent) {
@@ -137,8 +137,11 @@ private fun onTransfer(event: InventoryClickEvent) {
 private fun onDeath(event: PlayerDeathEvent) {
     event.drops.removeIf { isBlacklisted(event.player, it) }
 
-    if (event.player.role == Role.Warden)
-        event.drops.clear()
+    when (event.player.role) {
+        Role.Warden -> event.drops.clear()
+        Role.Swat -> event.drops.removeIf { Math.random() * 100 <= 20 }
+        else -> {}
+    }
 }
 
 private fun isBlacklisted(player: Player, itemStack: ItemStack): Boolean {
