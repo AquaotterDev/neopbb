@@ -122,6 +122,11 @@ internal fun tickSchedule() {
             player.sendTitlePart(TitlePart.SUBTITLE, "<red>Go to your cell or you'll be killed!".mm)
         }
 
+        if (period == Period.Breakfast || period == Period.Lunch || period == Period.Dinner)
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.foodLevel = 20
+            }
+
         bossBar.name(bossBarName(player, timer))
             .progress(bossBarProgress(timer))
     }

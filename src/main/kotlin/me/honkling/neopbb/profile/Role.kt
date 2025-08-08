@@ -18,7 +18,7 @@ import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
-import org.bukkit.enchantments.Enchantment
+import org.bukkit.enchantments.Enchantment.*
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
@@ -61,7 +61,7 @@ val keycard = ItemStack(Material.TRIPWIRE_HOOK)
 val handcuffs = ItemStack(Material.IRON_SHOVEL)
     .builder()
     .displayName("Handcuffs <red>[CONTRABAND]".mm)
-    .enchant(Enchantment.KNOCKBACK)
+    .enchant(KNOCKBACK)
     .build()
 
 enum class Role(
@@ -93,16 +93,33 @@ enum class Role(
 
         swatUnlocked = false
 
-        val sword = ItemStack(Material.DIAMOND_SWORD)
+        val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
-            .enchant(Enchantment.SHARPNESS, 2)
-            .enchant(Enchantment.UNBREAKING, 2)
+            .enchant(PROTECTION, 2)
             .build()
 
-        inventory.setItem(EquipmentSlot.HEAD, ItemStack(Material.CHAINMAIL_HELMET))
-        inventory.setItem(EquipmentSlot.CHEST, ItemStack(Material.IRON_CHESTPLATE))
-        inventory.setItem(EquipmentSlot.LEGS, ItemStack(Material.IRON_LEGGINGS))
-        inventory.setItem(EquipmentSlot.FEET, ItemStack(Material.NETHERITE_BOOTS))
+        val chestplate = ItemStack(Material.IRON_CHESTPLATE)
+            .builder()
+            .enchant(PROTECTION)
+            .build()
+
+        val leggings = ItemStack(Material.IRON_LEGGINGS)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
+        val boots = ItemStack(Material.NETHERITE_BOOTS)
+            .builder()
+            .enchant(PROTECTION)
+            .enchant(PROJECTILE_PROTECTION, 3)
+            .build()
+
+        val sword = ItemStack(Material.DIAMOND_SWORD)
+
+        inventory.setItem(EquipmentSlot.HEAD, helmet)
+        inventory.setItem(EquipmentSlot.CHEST, chestplate)
+        inventory.setItem(EquipmentSlot.LEGS, leggings)
+        inventory.setItem(EquipmentSlot.FEET, boots)
         inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
         inventory.addItem(
             sword,
@@ -116,29 +133,29 @@ enum class Role(
     }),
     Guard(true, guardsTeam, "<gray>[<blue>GUARD</blue>]", {
         val helmet = ItemStack(Material.IRON_HELMET)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 2)
+            .enchant(PROJECTILE_PROTECTION)
             .color(126, 135, 245)
             .build()
 
-        val leggings = ItemStack(Material.LEATHER_LEGGINGS)
+        val leggings = ItemStack(Material.CHAINMAIL_LEGGINGS)
             .builder()
-            .enchant(Enchantment.PROTECTION)
-            .color(126, 135, 245)
+            .enchant(PROTECTION, 3)
             .build()
 
         val boots = ItemStack(Material.LEATHER_BOOTS)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 2)
             .color(126, 135, 245)
             .build()
 
         val sword = ItemStack(Material.IRON_SWORD)
-            .builder()
-            .enchant(Enchantment.SHARPNESS)
-            .enchant(Enchantment.UNBREAKING)
-            .build()
 
         inventory.setItem(EquipmentSlot.HEAD, helmet)
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
@@ -155,28 +172,32 @@ enum class Role(
     }),
     Nurse(true, nursesTeam, "<gray>[<light_purple>NURSE</light_purple>]", {
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION)
+            .enchant(PROJECTILE_PROTECTION)
             .color(Color.PURPLE)
             .build()
 
         val leggings = ItemStack(Material.LEATHER_LEGGINGS)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION)
             .color(Color.PURPLE)
             .build()
 
         val boots = ItemStack(Material.LEATHER_BOOTS)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 3)
             .color(Color.PURPLE)
             .build()
 
-        val sword = ItemStack(Material.STONE_SWORD)
+        val sword = ItemStack(Material.WOODEN_SWORD)
             .builder()
-            .enchant(Enchantment.SHARPNESS)
-            .enchant(Enchantment.UNBREAKING)
+            .enchant(SHARPNESS)
             .build()
 
         val potion = ItemStack(Material.SPLASH_POTION)
@@ -199,17 +220,34 @@ enum class Role(
         )
     }),
     Swat(true, swatsTeam, "<gray>[<dark_gray>SWAT</dark_gray>]", {
-        val helmet = ItemStack(Material.NETHERITE_HELMET)
-        val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
-        chestplate.addEnchantment(Enchantment.PROTECTION, 1)
-        val leggings = ItemStack(Material.NETHERITE_LEGGINGS)
-        val boots = ItemStack(Material.LEATHER_BOOTS)
+        val helmet = ItemStack(Material.IRON_HELMET)
             .builder()
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 2)
+            .build()
+
+        val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
+        val leggings = ItemStack(Material.LEATHER_LEGGINGS)
+            .builder()
+            .enchant(PROTECTION)
+            .enchant(PROJECTILE_PROTECTION, 2)
             .color(Color.GRAY)
             .build()
 
-        val sword = ItemStack(Material.DIAMOND_SWORD)
+        val boots = ItemStack(Material.LEATHER_BOOTS)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .color(Color.GRAY)
+            .build()
+
+        val sword = ItemStack(Material.IRON_SWORD)
+            .builder()
+            .enchant(SHARPNESS)
+            .build()
+
         inventory.setItem(EquipmentSlot.HEAD, helmet)
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
@@ -228,30 +266,32 @@ enum class Role(
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
             .displayName(name)
+            .enchant(PROTECTION, 2)
+            .enchant(PROJECTILE_PROTECTION)
             .build()
 
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
             .displayName(name)
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 3)
             .color(Color.RED)
             .build()
 
         val leggings = ItemStack(Material.CHAINMAIL_LEGGINGS)
             .builder()
             .displayName(name)
-            .enchant(Enchantment.PROTECTION)
+            .enchant(PROTECTION, 2)
             .build()
 
         val boots = ItemStack(Material.CHAINMAIL_BOOTS)
             .builder()
             .displayName(name)
+            .enchant(PROTECTION, 2)
             .build()
 
         val sword = ItemStack(Material.STONE_SWORD)
             .builder()
-            .enchant(Enchantment.SHARPNESS, 2)
-            .enchant(Enchantment.UNBREAKING)
+            .enchant(SHARPNESS)
             .build()
 
         inventory.setItem(EquipmentSlot.HEAD, helmet)
