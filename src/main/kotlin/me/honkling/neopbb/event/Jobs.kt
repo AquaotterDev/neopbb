@@ -139,7 +139,7 @@ private fun onInteract(event: PlayerInteractEvent) {
         val side = state.getSide(Side.FRONT)
         val line = PlainTextComponentSerializer.plainText().serialize(side.line(2))
 
-        player.give(when (line) {
+        player.inventory.addItem(when (line) {
             "Lumberjack" -> lumberAxe
             "Plumber" -> plumbingStick
             "Bounty Hunter" -> bountyHunterSword
