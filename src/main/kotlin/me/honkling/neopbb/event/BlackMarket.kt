@@ -6,6 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.lib.*
 import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.isInBlackMarket
 import me.honkling.neopbb.profile.purchaseItem
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.key.Key
@@ -26,6 +27,10 @@ private fun onInteract(event: PlayerInteractEvent) {
         if (player.role.isAuthority && player.role != Role.Warden)
             return player.sendMessage("<p>You can't go in there..!".mm)
 
+        if (player.passengers.isNotEmpty())
+            return player.sendMessage("<p>You can't go in the black market while somebody is handcuffed.".mm)
+
+        player.isInBlackMarket = true
         player.teleport(currentPrison.blackMarketIn)
         player.sendTitlePart(TitlePart.TITLE, "<gray>-= Black Market =-".mm)
         player.playSound(Sound.sound {
@@ -43,6 +48,7 @@ private fun onInteract(event: PlayerInteractEvent) {
     val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(2))
 
     if (lineOne == "Leave Market") {
+        player.isInBlackMarket = false
         player.teleport(currentPrison.blackMarketOut)
         player.playSound(Sound.sound {
             it.type(Key.key("minecraft:entity.ender_pearl.throw"))

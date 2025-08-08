@@ -24,6 +24,7 @@ var Player.money by createKey(0.0f)
 var Player.teamChat by createKey(fallbackValue = false)
 
 var Player.attendedRollCall by createKey<Boolean>(false, persistent = false)
+var Player.isInBlackMarket by createKey<Boolean>(false, persistent = false)
 var Player.solitaryTask by createKey<Int?>(persistent = false)
 var Player.handcuffTask by createKey<Int?>(false)
 var Player.respawnTask by createKey<Int?>(false)
