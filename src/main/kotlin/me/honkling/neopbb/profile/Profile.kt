@@ -56,6 +56,7 @@ fun Player.prepare(reset: Boolean) {
 
 fun Player.forceRespawn() {
     respawnTask?.let { Bukkit.getScheduler().cancelTask(it) }
+    noDamageTicks = 20 * 5
     respawnTask = null
 
     gameMode = GameMode.SPECTATOR
