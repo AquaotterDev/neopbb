@@ -129,7 +129,7 @@ private fun onInteract(event: PlayerInteractEvent) {
         player.playSound(yes)
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
-            player.playSound()
+            player.playSound(yes)
             player.money += 2
         }, 20L * 4)
     }
