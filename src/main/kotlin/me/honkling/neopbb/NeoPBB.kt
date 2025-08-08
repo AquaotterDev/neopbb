@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.honkling.commando.spigot.SpigotCommando
 import me.honkling.neopbb.config.prisonsToml
+import me.honkling.neopbb.config.reloadConfigToml
 import me.honkling.neopbb.config.reloadFilterToml
 import me.honkling.neopbb.config.reloadPrisonsToml
 import me.honkling.neopbb.discord.initializeKord
@@ -44,6 +45,7 @@ class NeoPBB : JavaPlugin() {
         world = Bukkit.getWorlds()[0]
         world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)
 
+        reloadConfigToml()
         reloadFilterToml()
         reloadPrisonsToml()
         currentPrison = prisonsToml.prisons[0]
