@@ -112,14 +112,8 @@ internal fun tickSchedule() {
             player.sendTitlePart(TitlePart.SUBTITLE, "<red>Go to the red sand or you'll be killed!".mm)
         }
 
-        if ((period == Period.Lockdown || period == Period.LightsOut) && !player.role.isAuthority) {
-            player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
-                Duration.ZERO,
-                Duration.ofSeconds(2L),
-                Duration.ZERO
-            ))
-            player.sendTitlePart(TitlePart.TITLE, Component.empty())
-            player.sendTitlePart(TitlePart.SUBTITLE, "<red>Go to your cell or you'll be killed!".mm)
+        if ((period == Period.Lockdown || period == Period.LightsOut) && !player.role.isAuthority && minutes == 0) {
+            player.sendMessage("<p>Go to your cell or you'll be killed!".mm)
         }
 
         if (period == Period.Breakfast || period == Period.Lunch || period == Period.Dinner)
