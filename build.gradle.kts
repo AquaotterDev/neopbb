@@ -24,7 +24,7 @@ dependencies {
     implementation("dev.kord:kord-core:0.15.0")
     implementation(kotlin("reflect"))
 
-    compileOnly("me.honkling:ruby:0.1.3")
+    compileOnly("com.github.honkling:ruby:develop")
     compileOnly("com.github.retrooper:packetevents-spigot:2.9.3")
 }
 
