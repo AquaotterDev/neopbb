@@ -105,7 +105,7 @@ internal fun tickSchedule() {
         if (period == Period.RollCall && !player.attendedRollCall && !player.role.isAuthority) {
             player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                 Duration.ZERO,
-                Duration.ofSeconds(20L),
+                Duration.ofSeconds(2L),
                 Duration.ZERO
             ))
             player.sendTitlePart(TitlePart.TITLE, Component.empty())
@@ -115,7 +115,7 @@ internal fun tickSchedule() {
         if ((period == Period.Lockdown || period == Period.LightsOut) && !player.role.isAuthority) {
             player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                 Duration.ZERO,
-                Duration.ofSeconds(20L),
+                Duration.ofSeconds(2L),
                 Duration.ZERO
             ))
             player.sendTitlePart(TitlePart.TITLE, Component.empty())
