@@ -127,6 +127,7 @@ private fun onInteract(event: PlayerInteractEvent) {
         event.item!!.amount--
         player.setCooldown(Material.COD, 2)
         player.playSound(yes)
+        event.isCancelled = true
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
             player.playSound(yes)
