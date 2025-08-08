@@ -11,5 +11,5 @@ private fun onConsume(event: PlayerItemConsumeEvent) {
     val player = event.player
 
     if (event.item.type == Material.GOLDEN_APPLE)
-        player.setCooldown(Material.GOLDEN_APPLE, 20 * if (player.role.isAuthority) 15 else 5)
+        player.setCooldown(Material.GOLDEN_APPLE, 20 * if (player.role.isAuthority) 12 else 10)
 }
