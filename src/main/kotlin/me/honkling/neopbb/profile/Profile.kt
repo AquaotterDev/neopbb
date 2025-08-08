@@ -15,8 +15,6 @@ import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import kotlin.reflect.jvm.isAccessible
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 var Player.role by createKey(Role.Prisoner, persistent = false)
 var Player.invite by createKey<Invite?>(false)
@@ -32,7 +30,7 @@ var Player.respawnTask by createKey<Int?>(false)
 val Player.inSolitary get() = solitaryTask != null
 val Player.isRespawning get() = respawnTask != null
 
-fun Player.prepare(reset: Boolean) {
+fun Player.prepare(reset: Boolean, broadcast: Boolean = false) {
     if (reset) {
         inventory.clear()
         health = getAttribute(Attribute.MAX_HEALTH)!!.value
@@ -40,7 +38,7 @@ fun Player.prepare(reset: Boolean) {
         invite = null
     }
 
-    if (role.isAuthority) {
+    if (role.isAuthority && broadcast) {
         val display = if (role == Role.Warden) "the warden" else "a ${role.name.lowercase()}"
         Bukkit.getServer().sendMessage("<p><s>$name</s> is now $display!".mm)
     }

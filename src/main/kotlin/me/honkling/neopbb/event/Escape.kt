@@ -3,16 +3,9 @@
 package me.honkling.neopbb.event
 
 import me.honkling.commando.spigot.event.Listener
-import me.honkling.neopbb.lib.honeyBottle
-import me.honkling.neopbb.lib.legalGoldenApple
-import me.honkling.neopbb.lib.milk
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.lib.nauseaPotion
-import me.honkling.neopbb.lib.soup
-import me.honkling.neopbb.lib.steak
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.prepare
-import me.honkling.neopbb.profile.purchaseItem
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.block.Sign
@@ -29,15 +22,16 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     when (line) {
         "Get Gear" -> {
-            if (player.role != Role.Prisoner)
-                return
+            if (player.role != Role.Prisoner) {
+                return player.sendMessage("<p>Only prisoners can escape.".mm)
+            }
 
             player.role = Role.Criminal
-            player.prepare(false)
+            player.prepare(false, broadcast = true)
         }
         "Restore Kit" -> {
-            if (!player.role.isAuthority)
-                return player.sendMessage("<p>Only guards can restore their kit.".mm)
+            if (player.role == Role.Warden || !player.role.isAuthority)
+                return player.sendMessage("<p>Only guards, nurses, and swats can restore their kit.".mm)
 
             player.prepare(true)
         }
