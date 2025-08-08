@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 
 fun registerTasks() {
     val scheduler = Bukkit.getScheduler()
-    scheduler.scheduleSyncRepeatingTask(instance, ::refreshTab, 0L, 20L * 10)
+    scheduler.scheduleSyncRepeatingTask(instance, ::refreshTab, 0L, 20L)
     scheduler.scheduleSyncRepeatingTask(instance, {
         executeRollCall()
         executeActionBar()

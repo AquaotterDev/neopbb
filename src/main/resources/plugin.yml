@@ -7,3 +7,5 @@ softdepend: [ MinehutCosmetics ]
 depend: [ packetevents ]
 authors: [ lilrosalyn ]
 description: HELLO
+#libraries:
+#  - dev.kord:kord-core:0.15.0
