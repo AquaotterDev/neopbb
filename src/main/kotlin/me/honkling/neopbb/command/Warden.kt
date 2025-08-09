@@ -22,8 +22,8 @@ private fun warden(player: Player) {
     if (player.isRespawning)
         return player.sendMessage("<p>You must wait to respawn.".mm)
 
-    if (lastWarden == player)
-        return player.sendMessage("<p>You cannot be the warden a second time.".mm)
+//    if (lastWarden == player)
+//        return player.sendMessage("<p>You cannot be the warden a second time.".mm)
 
     lastWarden = player
     player.role = Role.Warden
@@ -118,6 +118,7 @@ private fun release(sender: Player, player: Player) {
 
     player.role = Role.Prisoner
     player.solitaryTask?.let { Bukkit.getScheduler().cancelTask(it) }
+    player.solitaryTask = null
 
     if (player.isRespawning)
         player.forceRespawn()
