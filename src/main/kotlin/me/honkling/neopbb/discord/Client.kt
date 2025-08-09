@@ -6,6 +6,7 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import me.honkling.neopbb.config.configToml
 import me.honkling.neopbb.instance
+import org.bukkit.Bukkit
 
 internal lateinit var kord: Kord; private set
 internal lateinit var channel: TextChannel; private set
@@ -21,4 +22,7 @@ suspend fun initializeKord() {
         @OptIn(PrivilegedIntent::class)
         intents += Intent.MessageContent
     }
+
+    if (!Bukkit.getServer().isStopping)
+        initializeKord()
 }
