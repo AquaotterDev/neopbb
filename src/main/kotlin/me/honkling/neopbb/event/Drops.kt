@@ -3,6 +3,7 @@
 package me.honkling.neopbb.event
 
 import me.honkling.commando.spigot.event.Listener
+import me.honkling.neopbb.lib.bountyHunterSword
 import me.honkling.neopbb.lib.compareWithoutDurability
 import me.honkling.neopbb.lib.miningPickaxe
 import me.honkling.neopbb.profile.Role
@@ -28,7 +29,6 @@ private val blacklistedMaterials = listOf(
     Material.BOWL,
     Material.TRIPWIRE_HOOK,
     Material.WOODEN_AXE,
-    Material.WOODEN_SWORD,
     Material.CARROT_ON_A_STICK,
     Material.IRON_DOOR,
     Material.STONE_BUTTON,
@@ -49,7 +49,8 @@ private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
     { player, _ -> player.role == Role.Warden },
-    { _, it -> it.compareWithoutDurability(miningPickaxe) }
+    { _, it -> it.compareWithoutDurability(miningPickaxe) },
+    { _, it -> it.compareWithoutDurability(bountyHunterSword) }
 )
 
 private fun onDrop(event: PlayerDropItemEvent) {
@@ -154,7 +155,7 @@ private fun onDeath(event: PlayerDeathEvent) {
 
     when (event.player.role) {
         Role.Warden -> event.drops.clear()
-        Role.Swat -> event.drops.removeIf { Math.random() * 100 <= 20 }
+        Role.Swat -> event.drops.removeIf { Math.random() > 0.2 }
         else -> {}
     }
 }

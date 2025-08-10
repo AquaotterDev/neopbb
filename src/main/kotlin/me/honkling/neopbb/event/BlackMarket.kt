@@ -57,7 +57,7 @@ private fun onInteract(event: PlayerInteractEvent) {
     }
 
     when (lineTwo) {
-        "Dagger" -> player.purchaseItem(1000f, dagger)
+        "Dagger" -> player.purchaseItem(400f, dagger)
         "Scrap Metal" -> player.purchaseItem(150f, scrapMetal)
         "Supreme Stick" -> player.purchaseItem(50f, supremeStick)
         "Illegal Healing" -> player.purchaseItem(30f, illegalGoldenApple)
