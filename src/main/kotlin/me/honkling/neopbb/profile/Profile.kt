@@ -14,6 +14,7 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
+import java.util.UUID
 import kotlin.reflect.jvm.isAccessible
 
 var Player.role by createKey(Role.Prisoner, persistent = false)
@@ -76,7 +77,8 @@ fun Player.cleanUp() {
         Player::invite,
         Player::handcuffTask,
         Player::respawnTask,
-        Player::attendedRollCall
+        Player::attendedRollCall,
+        Player::isInBlackMarket
     )
 
     for (field in nonPersistentFields) {
