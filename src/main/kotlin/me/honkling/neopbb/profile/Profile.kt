@@ -28,6 +28,8 @@ var Player.solitaryTask by createKey<Int?>(persistent = false)
 var Player.handcuffTask by createKey<Int?>(false)
 var Player.respawnTask by createKey<Int?>(false)
 
+var Player.spawnWithUniform by createKey<Boolean>(fallbackValue = true)
+
 val Player.inSolitary get() = solitaryTask != null
 val Player.isRespawning get() = respawnTask != null
 
