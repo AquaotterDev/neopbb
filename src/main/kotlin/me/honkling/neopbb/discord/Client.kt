@@ -6,6 +6,7 @@ import dev.kord.core.entity.channel.TextChannel
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import me.honkling.neopbb.config.configToml
+import me.honkling.neopbb.discord.command.registerPunish
 import me.honkling.neopbb.instance
 import org.bukkit.Bukkit
 
@@ -32,6 +33,7 @@ suspend fun initializeKord() {
 
     initializeEvents()
     initializeReports()
+    registerPunish()
 
     kord.login {
         @OptIn(PrivilegedIntent::class)
