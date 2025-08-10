@@ -16,6 +16,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
@@ -91,21 +92,21 @@ enum class Role(
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 4.0)
+            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 4.0)
             .maxDamage(2000)
             .build()
 
         val chestplate = ItemStack(Material.IRON_CHESTPLATE)
             .builder()
             .enchant(PROTECTION)
-            .attribute(ARMOR, 6.0)
+            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 6.0)
             .maxDamage(2000)
             .build()
 
         val leggings = ItemStack(Material.IRON_LEGGINGS)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 5.0)
+            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
             .maxDamage(2000)
             .build()
 
@@ -113,7 +114,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION)
             .enchant(PROJECTILE_PROTECTION, 3)
-            .attribute(ARMOR, 4.0)
+            .attribute(ARMOR, EquipmentSlotGroup.FEET, 4.0)
             .maxDamage(2000)
             .build()
 
@@ -141,7 +142,7 @@ enum class Role(
         val helmet = ItemStack(Material.IRON_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 3.0)
+            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 3.0)
             .maxDamage(1000)
             .build()
 
@@ -149,7 +150,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION, 2)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, 6.0)
+            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 6.0)
             .color(126, 135, 245)
             .maxDamage(1000)
             .build()
@@ -157,14 +158,14 @@ enum class Role(
         val leggings = ItemStack(Material.CHAINMAIL_LEGGINGS)
             .builder()
             .enchant(PROTECTION, 3)
-            .attribute(ARMOR, 5.0)
+            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
             .maxDamage(1000)
             .build()
 
         val boots = ItemStack(Material.LEATHER_BOOTS)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 2.5)
+            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.5)
             .color(126, 135, 245)
             .maxDamage(1000)
             .build()
@@ -191,7 +192,7 @@ enum class Role(
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 2.5)
+            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 2.5)
             .maxDamage(750)
             .build()
 
@@ -199,7 +200,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, 5.0)
+            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 5.0)
             .maxDamage(750)
             .color(Color.PURPLE)
             .build()
@@ -208,7 +209,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION)
             .color(Color.PURPLE)
-            .attribute(ARMOR, 4.0)
+            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 4.0)
             .maxDamage(750)
             .build()
 
@@ -216,7 +217,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION, 3)
             .color(Color.PURPLE)
-            .attribute(ARMOR, 2.0)
+            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.0)
             .maxDamage(750)
             .build()
 
@@ -249,14 +250,14 @@ enum class Role(
         val helmet = ItemStack(Material.IRON_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 4.0)
+            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 4.0)
             .maxDamage(1250)
             .build()
 
         val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 7.0)
+            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 7.0)
             .maxDamage(1250)
             .build()
 
@@ -265,7 +266,7 @@ enum class Role(
             .enchant(PROTECTION)
             .enchant(PROJECTILE_PROTECTION, 2)
             .color(Color.GRAY)
-            .attribute(ARMOR, 5.0)
+            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
             .maxDamage(1250)
             .build()
 
@@ -273,7 +274,7 @@ enum class Role(
             .builder()
             .enchant(PROTECTION, 2)
             .color(Color.GRAY)
-            .attribute(ARMOR, 3.0)
+            .attribute(ARMOR, EquipmentSlotGroup.FEET, 3.0)
             .maxDamage(1250)
             .build()
 
@@ -303,7 +304,7 @@ enum class Role(
             .displayName(name)
             .enchant(PROTECTION, 2)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, 2.5)
+            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 2.5)
             .maxDamage(500)
             .build()
 
@@ -312,7 +313,7 @@ enum class Role(
             .displayName(name)
             .enchant(PROTECTION, 3)
             .color(Color.RED)
-            .attribute(ARMOR, 5.5)
+            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 5.5)
             .maxDamage(500)
             .build()
 
@@ -320,7 +321,7 @@ enum class Role(
             .builder()
             .displayName(name)
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 4.5)
+            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 4.5)
             .maxDamage(500)
             .build()
 
@@ -328,7 +329,7 @@ enum class Role(
             .builder()
             .displayName(name)
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, 2.0)
+            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.0)
             .maxDamage(500)
             .build()
 

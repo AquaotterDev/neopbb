@@ -44,7 +44,7 @@ val miningOres = mutableMapOf(
     Material.REDSTONE_ORE to 10.0f
 )
 
-val lumberLogs = Material.entries.filter { "LOG" in it.name && "STRIPPED_LOG" !in it.name }
+val lumberLogs = Material.entries.filter { "LOG" in it.name && "STRIPPED_" !in it.name }
 
 private fun onDamage(event: EntityDamageEvent) {
     val player = event.entity as? Player ?: return
@@ -70,8 +70,8 @@ private fun onBreak(event: BlockBreakEvent) {
     val type = block.type
 
     if (itemStack.compareWithoutDurability(lumberAxe) && type in lumberLogs) {
-        val state = block.state
-        block.type = Material.STRIPPED_SPRUCE_LOG
+        val data = block.blockData
+        block.type = Material.valueOf("STRIPPED_${block.type.name}")
         player.sendMessage("<s>+$2</s> for cutting wood".mm)
         player.playSound(yes)
         player.money += 2
@@ -83,8 +83,10 @@ private fun onBreak(event: BlockBreakEvent) {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
-            state.copy(block.location)
-        }, 20L * 10)
+            block.world.setBlockData(block.location, data)
+//            state.copy(block.location)
+//            block.state.update()
+        }, 20L * 4)
     }
 
     if (itemStack.compareWithoutDurability(miningPickaxe) && type in miningOres) {

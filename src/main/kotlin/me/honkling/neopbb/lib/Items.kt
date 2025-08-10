@@ -12,6 +12,8 @@ import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.LeatherArmorMeta
@@ -143,11 +145,12 @@ class ItemStackBuilder(private val itemStack: ItemStack) {
         return this
     }
 
-    fun attribute(type: Attribute, value: Double): ItemStackBuilder {
+    fun attribute(type: Attribute, slot: EquipmentSlotGroup, value: Double): ItemStackBuilder {
         meta.addAttributeModifier(type, AttributeModifier(
             NamespacedKey("minecraft", UUID.randomUUID().toString()),
             value,
-            AttributeModifier.Operation.ADD_NUMBER
+            AttributeModifier.Operation.ADD_NUMBER,
+            slot
         ))
         return this
     }
