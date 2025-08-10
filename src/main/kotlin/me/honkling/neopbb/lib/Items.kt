@@ -1,5 +1,6 @@
 package me.honkling.neopbb.lib
 
+import io.papermc.paper.datacomponent.DataComponentTypes
 import me.honkling.neopbb.event.lumberLogs
 import me.honkling.neopbb.event.miningOres
 import net.kyori.adventure.text.Component
@@ -7,12 +8,16 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
+import java.util.UUID
 
 val paper = ItemStack(Material.PAPER)
 val soup = ItemStack(Material.MUSHROOM_STEW)
@@ -123,6 +128,20 @@ class ItemStackBuilder(private val itemStack: ItemStack) {
 
     fun potionEffect(type: PotionEffectType, duration: Int, amplifier: Int): ItemStackBuilder {
         (meta as? PotionMeta)?.addCustomEffect(type.createEffect(duration, amplifier), true)
+        return this
+    }
+
+    fun attribute(type: Attribute, value: Double): ItemStackBuilder {
+        meta.addAttributeModifier(type, AttributeModifier(
+            NamespacedKey("minecraft", UUID.randomUUID().toString()),
+            value,
+            AttributeModifier.Operation.ADD_NUMBER
+        ))
+        return this
+    }
+
+    fun maxDamage(amount: Int): ItemStackBuilder {
+        itemStack.setData(DataComponentTypes.MAX_DAMAGE, amount)
         return this
     }
 
