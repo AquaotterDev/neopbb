@@ -7,6 +7,7 @@ import me.honkling.neopbb.lib.compareWithoutDurability
 import me.honkling.neopbb.lib.miningPickaxe
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.role
+import me.honkling.neopbb.profile.warden
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -38,6 +39,12 @@ private val blacklistedMaterials = listOf(
     Material.DIAMOND_SWORD
 )
 
+private val dontDropAsWarden = listOf(
+    Material.DIAMOND_SWORD,
+    Material.NETHERITE_BOOTS,
+    Material.TRIPWIRE_HOOK
+)
+
 private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
     { _, it -> "Prisoner Uniform" in PlainTextComponentSerializer.plainText().serialize(it.displayName()) },
     { _, it -> it.enchantments.containsKey(Enchantment.VANISHING_CURSE) },
@@ -48,6 +55,12 @@ private val blacklistedPredicates = listOf<(Player, ItemStack) -> Boolean>(
 private fun onDrop(event: PlayerDropItemEvent) {
     val player = event.player
     val itemStack = event.itemDrop.itemStack
+
+    if (player == warden && itemStack.type in dontDropAsWarden) {
+        event.isCancelled = true
+        playNo(player)
+        return
+    }
 
     if (isBlacklisted(player, itemStack)) {
         event.itemDrop.itemStack = ItemStack(Material.AIR)
