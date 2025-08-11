@@ -132,11 +132,13 @@ private fun onInteract(event: PlayerInteractEvent) {
         player.inventory.addItem(ItemStack(Material.COD))
     }
 
+    if (block.type == Material.BLAST_FURNACE
+        event.isCancelled = true
+
     if (block.type == Material.BLAST_FURNACE && event.item?.type == Material.COD && player.getCooldown(Material.COD) <= 0) {
         event.item!!.amount--
         player.setCooldown(Material.COD, 2)
         player.playSound(yes)
-        event.isCancelled = true
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
             player.playSound(yes)
