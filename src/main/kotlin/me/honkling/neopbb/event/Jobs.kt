@@ -84,8 +84,6 @@ private fun onBreak(event: BlockBreakEvent) {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
             block.world.setBlockData(block.location, data)
-//            state.copy(block.location)
-//            block.state.update()
         }, 20L * 4)
     }
 
