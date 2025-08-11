@@ -132,7 +132,7 @@ private fun onInteract(event: PlayerInteractEvent) {
         player.inventory.addItem(ItemStack(Material.COD))
     }
 
-    if (block.type == Material.BLAST_FURNACE
+    if (block.type == Material.BLAST_FURNACE)
         event.isCancelled = true
 
     if (block.type == Material.BLAST_FURNACE && event.item?.type == Material.COD && player.getCooldown(Material.COD) <= 0) {
