@@ -1,7 +1,6 @@
 package me.honkling.neopbb
 
 import net.kyori.adventure.text.Component
-import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Villager
 
