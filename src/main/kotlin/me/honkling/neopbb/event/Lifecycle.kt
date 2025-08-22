@@ -51,14 +51,15 @@ private fun onQuit(event: PlayerQuitEvent) {
 
 private fun onDeath(event: PlayerDeathEvent) {
     val player = event.player
+    val attacker = event.damageSource.causingEntity as? Player
+        ?: return
+
+    if(attacker.passengers.any { it == player }) return
 
     if (player.role == Role.Criminal)
         player.role = Role.Prisoner
 
-    val attacker = event.damageSource.causingEntity as? Player
-        ?: return
-
-    if (player.isGlowing && !attacker.passengers.any { it == player }) {
+    if (player.isGlowing) {
         attacker.money += 100
         attacker.sendMessage("<p><s>+100$</s> for killing a glowing player.".mm)
         player.isGlowing = false
