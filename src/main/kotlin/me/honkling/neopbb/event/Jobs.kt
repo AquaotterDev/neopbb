@@ -9,11 +9,9 @@ import me.honkling.neopbb.profile.money
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Sign
-import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -148,18 +146,23 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     val state = block.state as? Sign
     if (state != null) {
-        val side = state.getSide(Side.FRONT)
-        val line = PlainTextComponentSerializer.plainText().serialize(side.line(2))
+        val lines = getAllSignLines(state)
 
-        player.inventory.addItem(when (line) {
-            "Lumberjack" -> lumberAxe
-            "Plumber" -> plumbingStick
-            "Bounty Hunter" -> bountyHunterSword
-            "Shovelling" -> shovel
-            "Mining" -> miningPickaxe
-            else -> return
-        })
-        return
+        for (signLine in lines) {
+            val item = when (signLine) {
+                "Lumberjack" -> lumberAxe
+                "Plumber" -> plumbingStick
+                "Bounty Hunter" -> bountyHunterSword
+                "Shovelling" -> shovel
+                "Mining" -> miningPickaxe
+                else -> null
+            }
+
+            if (item != null) {
+                player.inventory.addItem(item)
+                return
+            }
+        }
     }
 
     val mainItem = player.inventory.getItem(hand).asOne()

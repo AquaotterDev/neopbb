@@ -11,11 +11,9 @@ import me.honkling.neopbb.profile.purchaseItem
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Material
 import org.bukkit.block.Sign
-import org.bukkit.block.sign.Side
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
@@ -43,27 +41,23 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     val state = block.state as? Sign
         ?: return
+    val lines = getAllSignLines(state)
 
-    val side = state.getSide(Side.FRONT)
-    val lineOne = PlainTextComponentSerializer.plainText().serialize(side.line(1))
-    val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(2))
-
-    if (lineOne == "Leave Market") {
-        player.isInBlackMarket = false
-        player.teleport(currentPrison.blackMarketOut)
-        player.playSound(Sound.sound {
-            it.type(Key.key("minecraft:entity.ender_pearl.throw"))
-        })
-        return
-    }
-
-    when (lineTwo) {
-        "Dagger" -> player.purchaseItem(400f, dagger)
-        "Scrap Metal" -> player.purchaseItem(150f, scrapMetal)
-        "Supreme Stick" -> player.purchaseItem(50f, supremeStick)
-        "Illegal Healing" -> player.purchaseItem(30f, illegalGoldenApple)
-        "Coal" -> player.purchaseItem(30f, coal)
-        "Arrows" -> player.purchaseItem(16f, ItemStack(Material.ARROW, 8))
-        "Strong Chest" -> player.purchaseItem(1000f, ItemStack(Material.IRON_CHESTPLATE))
+    for (line in lines)
+    when (line) {
+        "Leave Market" -> {
+            player.isInBlackMarket = false
+            player.teleport(currentPrison.blackMarketOut)
+            return player.playSound(Sound.sound {
+                it.type(Key.key("minecraft:entity.ender_pearl.throw"))
+            })
+        }
+        "Dagger" -> return player.purchaseItem(400f, dagger)
+        "Scrap Metal" -> return player.purchaseItem(150f, scrapMetal)
+        "Supreme Stick" -> return player.purchaseItem(50f, supremeStick)
+        "Illegal Healing" -> return player.purchaseItem(30f, illegalGoldenApple)
+        "Coal" -> return player.purchaseItem(30f, coal)
+        "Arrows" -> return player.purchaseItem(16f, ItemStack(Material.ARROW, 8))
+        "Strong Chest" -> return player.purchaseItem(1000f, ItemStack(Material.IRON_CHESTPLATE))
     }
 }

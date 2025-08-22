@@ -4,7 +4,6 @@ package me.honkling.neopbb.event
 
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.profile.keycard
-import me.honkling.neopbb.world
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Material
