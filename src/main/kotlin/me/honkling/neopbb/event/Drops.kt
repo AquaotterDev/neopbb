@@ -17,6 +17,7 @@ import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryAction.*
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -110,6 +111,7 @@ private fun onTransfer(event: InventoryClickEvent) {
         SWAP_WITH_CURSOR, HOTBAR_MOVE_AND_READD, HOTBAR_SWAP
     )) {
         val hotbarItem = if (event.hotbarButton != -1) player.inventory.getItem(event.hotbarButton)
+            else if (event.click == ClickType.SWAP_OFFHAND) player.inventory.itemInOffHand
             else null
 
         val hotbarItemBlacklisted = hotbarItem?.let { isBlacklisted(player, it) } ?: false
