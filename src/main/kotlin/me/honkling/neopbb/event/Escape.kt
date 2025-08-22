@@ -6,6 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.lib.getAllSignLines
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.isRespawning
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
 import org.bukkit.block.Sign
@@ -22,6 +23,9 @@ private fun onInteract(event: PlayerInteractEvent) {
         "Get Gear" -> {
             if (player.role != Role.Prisoner)
                 return player.sendMessage("<p>Only prisoners can escape.".mm)
+
+            if(player.isRespawning)
+                return player.sendMessage("<p>You can't escape while respawning.".mm)
 
             player.role = Role.Criminal
             return player.prepare(false, broadcast = true)
