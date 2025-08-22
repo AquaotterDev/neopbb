@@ -58,7 +58,7 @@ private fun onDeath(event: PlayerDeathEvent) {
     val attacker = event.damageSource.causingEntity as? Player
         ?: return
 
-    if (player.isGlowing) {
+    if (player.isGlowing && !attacker.passengers.any { it == player }) {
         attacker.money += 100
         attacker.sendMessage("<p><s>+100$</s> for killing a glowing player.".mm)
         player.isGlowing = false
