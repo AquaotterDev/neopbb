@@ -110,10 +110,11 @@ private fun onBreak(event: BlockBreakEvent) {
 }
 
 private fun onDeath(event: PlayerDeathEvent) {
+    val player = event.player
     val attacker = event.damageSource.causingEntity as? Player
         ?: return
 
-    if (attacker.inventory.itemInMainHand.compareWithoutDurability(bountyHunterSword)) {
+    if (attacker.inventory.itemInMainHand.compareWithoutDurability(bountyHunterSword) && !attacker.passengers.any { it == player }) {
         attacker.money += 100
         attacker.sendMessage("<s>+$100</s> for killing somebody".mm)
         attacker.playSound(yes)
