@@ -1,6 +1,7 @@
 package me.honkling.neopbb.profile
 
 import me.honkling.neopbb.currentPrison
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.key.NonPersistentKey
 import me.honkling.neopbb.profile.key.createKey
@@ -23,6 +24,7 @@ var Player.money by createKey(0.0f)
 var Player.teamChat by createKey(fallbackValue = false)
 
 var Player.attendedRollCall by createKey<Boolean>(false, persistent = false)
+var Player.inCell by createKey<Boolean>(false, persistent = false)
 var Player.isInBlackMarket by createKey<Boolean>(false, persistent = false)
 var Player.solitaryTask by createKey<Int?>(persistent = false)
 var Player.handcuffTask by createKey<Int?>(false)
@@ -68,7 +70,7 @@ fun Player.forceRespawn() {
     sendTitlePart(TitlePart.SUBTITLE, Component.empty())
     prepare(true)
     teleport(
-        if (inSolitary) currentPrison.solitary
+        if (inSolitary) getRandomCell(currentPrison.solitaryCells)
         else currentPrison.respawn
     )
 }
@@ -77,6 +79,7 @@ fun Player.cleanUp() {
     val nonPersistentFields = listOf(
         Player::role,
         Player::invite,
+        Player::inCell,
         Player::handcuffTask,
         Player::respawnTask,
         Player::attendedRollCall,

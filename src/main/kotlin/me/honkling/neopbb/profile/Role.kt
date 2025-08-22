@@ -2,6 +2,7 @@ package me.honkling.neopbb.profile
 
 import me.honkling.neopbb.*
 import me.honkling.neopbb.lib.builder
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.lib.illegalGoldenApple
 import me.honkling.neopbb.lib.mm
 import net.kyori.adventure.key.Key
@@ -10,13 +11,11 @@ import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
-import org.bukkit.attribute.Attribute.*
 import org.bukkit.enchantments.Enchantment.*
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.EquipmentSlot
-import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
@@ -42,7 +41,10 @@ data class Invite(val player: Player, val role: Role) {
 
     fun expire() {
         cancel()
-        player.sendMessage("<p>Your invitation to become a ${role.name.lowercase()} has expired.".mm)
+
+        val roleFormatted = if(role == Role.Warden) "the warden" else "a ${role.name.lowercase()}"
+
+        player.sendMessage("<p>Your invitation to become $roleFormatted has expired.".mm)
         player.invite = null
     }
 }
@@ -92,36 +94,25 @@ enum class Role(
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 4.0)
-            .maxDamage(2000)
             .build()
 
         val chestplate = ItemStack(Material.IRON_CHESTPLATE)
             .builder()
             .enchant(PROTECTION)
-            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 6.0)
-            .maxDamage(2000)
             .build()
 
         val leggings = ItemStack(Material.IRON_LEGGINGS)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
-            .maxDamage(2000)
             .build()
 
         val boots = ItemStack(Material.NETHERITE_BOOTS)
             .builder()
             .enchant(PROTECTION)
             .enchant(PROJECTILE_PROTECTION, 3)
-            .attribute(ARMOR, EquipmentSlotGroup.FEET, 4.0)
-            .maxDamage(2000)
             .build()
 
         val sword = ItemStack(Material.DIAMOND_SWORD)
-            .builder()
-            .maxDamage(6000)
-            .build()
 
         inventory.setItem(EquipmentSlot.HEAD, helmet)
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
@@ -138,42 +129,73 @@ enum class Role(
 
         teleport(currentPrison.wardenSpawn)
     }),
+    Swat(true, swatsTeam, "<gray>[<dark_gray>SWAT</dark_gray>]", {
+        val helmet = ItemStack(Material.IRON_HELMET)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
+        val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .build()
+
+        val leggings = ItemStack(Material.LEATHER_LEGGINGS)
+            .builder()
+            .enchant(PROTECTION)
+            .enchant(PROJECTILE_PROTECTION, 2)
+            .color(Color.GRAY)
+            .build()
+
+        val boots = ItemStack(Material.LEATHER_BOOTS)
+            .builder()
+            .enchant(PROTECTION, 2)
+            .color(Color.GRAY)
+            .build()
+
+        val sword = ItemStack(Material.IRON_SWORD)
+            .builder()
+            .enchant(SHARPNESS)
+            .build()
+
+        inventory.setItem(EquipmentSlot.HEAD, helmet)
+        inventory.setItem(EquipmentSlot.CHEST, chestplate)
+        inventory.setItem(EquipmentSlot.LEGS, leggings)
+        inventory.setItem(EquipmentSlot.FEET, boots)
+        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
+        inventory.addItem(
+            sword,
+            ItemStack(Material.BOW),
+            handcuffs,
+            ItemStack(Material.COOKED_BEEF, 32),
+            ItemStack(Material.ARROW, 16)
+        )
+    }),
     Guard(true, guardsTeam, "<gray>[<blue>GUARD</blue>]", {
         val helmet = ItemStack(Material.IRON_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 3.0)
-            .maxDamage(1000)
             .build()
 
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
             .enchant(PROTECTION, 2)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 6.0)
             .color(126, 135, 245)
-            .maxDamage(1000)
             .build()
 
         val leggings = ItemStack(Material.CHAINMAIL_LEGGINGS)
             .builder()
             .enchant(PROTECTION, 3)
-            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
-            .maxDamage(1000)
             .build()
 
         val boots = ItemStack(Material.LEATHER_BOOTS)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.5)
             .color(126, 135, 245)
-            .maxDamage(1000)
             .build()
 
         val sword = ItemStack(Material.IRON_SWORD)
-            .builder()
-            .maxDamage(3000)
-            .build()
 
         inventory.setItem(EquipmentSlot.HEAD, helmet)
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
@@ -192,16 +214,12 @@ enum class Role(
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
             .builder()
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 2.5)
-            .maxDamage(750)
             .build()
 
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
             .builder()
             .enchant(PROTECTION)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 5.0)
-            .maxDamage(750)
             .color(Color.PURPLE)
             .build()
 
@@ -209,22 +227,17 @@ enum class Role(
             .builder()
             .enchant(PROTECTION)
             .color(Color.PURPLE)
-            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 4.0)
-            .maxDamage(750)
             .build()
 
         val boots = ItemStack(Material.LEATHER_BOOTS)
             .builder()
             .enchant(PROTECTION, 3)
             .color(Color.PURPLE)
-            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.0)
-            .maxDamage(750)
             .build()
 
         val sword = ItemStack(Material.WOODEN_SWORD)
             .builder()
             .enchant(SHARPNESS)
-            .maxDamage(2250)
             .build()
 
         val potion = ItemStack(Material.SPLASH_POTION)
@@ -246,57 +259,6 @@ enum class Role(
             ItemStack(Material.ARROW, 16)
         )
     }),
-    Swat(true, swatsTeam, "<gray>[<dark_gray>SWAT</dark_gray>]", {
-        val helmet = ItemStack(Material.IRON_HELMET)
-            .builder()
-            .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 4.0)
-            .maxDamage(1250)
-            .build()
-
-        val chestplate = ItemStack(Material.NETHERITE_CHESTPLATE)
-            .builder()
-            .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 7.0)
-            .maxDamage(1250)
-            .build()
-
-        val leggings = ItemStack(Material.LEATHER_LEGGINGS)
-            .builder()
-            .enchant(PROTECTION)
-            .enchant(PROJECTILE_PROTECTION, 2)
-            .color(Color.GRAY)
-            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 5.0)
-            .maxDamage(1250)
-            .build()
-
-        val boots = ItemStack(Material.LEATHER_BOOTS)
-            .builder()
-            .enchant(PROTECTION, 2)
-            .color(Color.GRAY)
-            .attribute(ARMOR, EquipmentSlotGroup.FEET, 3.0)
-            .maxDamage(1250)
-            .build()
-
-        val sword = ItemStack(Material.IRON_SWORD)
-            .builder()
-            .enchant(SHARPNESS)
-            .maxDamage(3750)
-            .build()
-
-        inventory.setItem(EquipmentSlot.HEAD, helmet)
-        inventory.setItem(EquipmentSlot.CHEST, chestplate)
-        inventory.setItem(EquipmentSlot.LEGS, leggings)
-        inventory.setItem(EquipmentSlot.FEET, boots)
-        inventory.setItem(EquipmentSlot.OFF_HAND, keycard)
-        inventory.addItem(
-            sword,
-            ItemStack(Material.BOW),
-            handcuffs,
-            ItemStack(Material.COOKED_BEEF, 32),
-            ItemStack(Material.ARROW, 16)
-        )
-    }),
     Criminal(false, criminalsTeam, "<gray>[<red>CRIMINAL</red>]", {
         val name = "Armor <red>[CONTRABAND]".mm
         val helmet = ItemStack(Material.CHAINMAIL_HELMET)
@@ -304,8 +266,6 @@ enum class Role(
             .displayName(name)
             .enchant(PROTECTION, 2)
             .enchant(PROJECTILE_PROTECTION)
-            .attribute(ARMOR, EquipmentSlotGroup.HEAD, 2.5)
-            .maxDamage(500)
             .build()
 
         val chestplate = ItemStack(Material.LEATHER_CHESTPLATE)
@@ -313,30 +273,23 @@ enum class Role(
             .displayName(name)
             .enchant(PROTECTION, 3)
             .color(Color.RED)
-            .attribute(ARMOR, EquipmentSlotGroup.CHEST, 5.5)
-            .maxDamage(500)
             .build()
 
         val leggings = ItemStack(Material.CHAINMAIL_LEGGINGS)
             .builder()
             .displayName(name)
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.LEGS, 4.5)
-            .maxDamage(500)
             .build()
 
         val boots = ItemStack(Material.CHAINMAIL_BOOTS)
             .builder()
             .displayName(name)
             .enchant(PROTECTION, 2)
-            .attribute(ARMOR, EquipmentSlotGroup.FEET, 2.0)
-            .maxDamage(500)
             .build()
 
         val sword = ItemStack(Material.STONE_SWORD)
             .builder()
             .enchant(SHARPNESS)
-            .maxDamage(1500)
             .build()
 
         inventory.setItem(EquipmentSlot.HEAD, helmet)
@@ -364,12 +317,12 @@ enum class Role(
             .color(40, 20, 2)
             .build()
 
-        if (spawnWithUniform) {
-            inventory.setItem(EquipmentSlot.CHEST, chestplate)
-            inventory.setItem(EquipmentSlot.LEGS, leggings)
-            inventory.setItem(EquipmentSlot.FEET, boots)
-        }
-        teleport(currentPrison.prisonerSpawn)
+        inventory.setItem(EquipmentSlot.CHEST, chestplate)
+        inventory.setItem(EquipmentSlot.LEGS, leggings)
+        inventory.setItem(EquipmentSlot.FEET, boots)
+
+        val prisonCell = getRandomCell(currentPrison.prisonerCells)
+        teleport(prisonCell)
     }),
     Solitary(false, solitaryTeam, "<black><gray>[<black>SOLITARY</black>]</gray>");
 

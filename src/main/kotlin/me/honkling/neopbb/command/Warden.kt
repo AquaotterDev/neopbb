@@ -2,9 +2,11 @@
 
 package me.honkling.neopbb.command
 
+import kotlinx.datetime.Clock
 import me.honkling.commando.common.command.node.ParameterNode
 import me.honkling.commando.spigot.command.Command
 import me.honkling.neopbb.instance
+import me.honkling.neopbb.lib.getCooldown
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.*
 import org.bukkit.Bukkit
@@ -95,18 +97,37 @@ private fun solitary(sender: Player, player: Player) {
     if (!player.isRespawning)
         return sender.sendMessage("<p>They must be dead to be put in solitary.".mm)
 
+    val elapsed = Clock.System.now().epochSeconds - lastSolitary
+    val cooldown = (60 * 2.5).toInt()
+
+    if (elapsed < cooldown)
+        return sender.sendMessage("<p>You must wait <s>${getCooldown(cooldown - elapsed)}</s> before putting another person into solitary.".mm)
+
     var player = player
     player.role = Role.Solitary
     player.solitaryTask = Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
         Bukkit.getPlayer(player.uniqueId)?.let { player = it } // Refresh player instance in case they relogged
+
+        if (player.role == Role.Solitary) {
+            player.role = Role.Prisoner
+            player.prepare(true, broadcast = true)
+        }
+
         player.solitaryTask = null
-        player.role = Role.Prisoner
-        player.prepare(true, broadcast = true)
 
         if (!player.isOnline)
             player.cleanUp()
     }, 20L * 120)
+
     player.forceRespawn()
+    lastSolitary = Clock.System.now().epochSeconds
+}
+
+private fun `solitary$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return Bukkit.getOnlinePlayers()
+        .filter { !it.role.isAuthority && !it.inSolitary && it.isRespawning }
+        .map { it.name }
+        .filter { it.contains(input, true) }
 }
 
 private fun release(sender: Player, player: Player) {
@@ -125,6 +146,44 @@ private fun release(sender: Player, player: Player) {
     else player.prepare(true, broadcast = true)
 }
 
+private fun `release$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return Bukkit.getOnlinePlayers()
+        .filter { it.inSolitary }
+        .map { it.name }
+        .filter { it.contains(input, true) }
+}
+
+private fun pass(sender: Player, player: Player) {
+    if (warden != sender)
+        return sender.sendMessage("<p>You aren't the warden.".mm)
+
+    if (player.isRespawning)
+        return sender.sendMessage("<p>You can't pass warden to a dead person.".mm)
+
+    if (player.inSolitary)
+        return sender.sendMessage("<p>You can't pass warden to somebody in solitary.".mm)
+
+    if (player.invite != null)
+        return sender.sendMessage("<p><s>${player.name}</s> already has an ongoing invitation.".mm)
+
+    if (sender.health <= 10 || player.health <= 10)
+        return sender.sendMessage("<p>Both you and the player must be above half health.".mm)
+
+    if (player == sender)
+        return sender.sendMessage("<p>You can't swap warden to yourself.".mm)
+
+    sender.sendMessage("<p><s>${player.name}</s> has been sent an invitation.".mm)
+    player.sendMessage("\n<p>The warden wants you to become the warden!\n<p><s><u><click:run_command:/accept>Accept</s>\n".mm)
+    player.invite = Invite(player, Role.Warden).schedule()
+}
+
+private fun `pass$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return Bukkit.getOnlinePlayers()
+        .filter { !it.isRespawning && !it.inSolitary && it.invite == null }
+        .map { it.name }
+        .filter { it.contains(input, true) }
+}
+
 private fun help(sender: CommandSender) {
     sender.sendMessage("""
         <p>Here are the commands you can run:
@@ -133,5 +192,6 @@ private fun help(sender: CommandSender) {
         <p><s>/warden fire (player)</s> - Fire a guard.
         <p><s>/warden solitary (player)</s> - Put a player into solitary.
         <p><s>/warden release (player)</s> - Release a player from solitary.
+        <p><s>/warden pass (player)</s> - Make a player the new warden.
     """.trimIndent().mm)
 }

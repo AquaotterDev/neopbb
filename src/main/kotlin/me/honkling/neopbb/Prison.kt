@@ -1,12 +1,12 @@
 package me.honkling.neopbb
 
 import me.honkling.neopbb.config.PrisonsToml
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.role
 import org.bukkit.Bukkit
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 lateinit var currentPrison: PrisonsToml.Prison; internal set
 var lastLockdown = 0L
@@ -22,7 +22,8 @@ fun switchMap(newPrison: PrisonsToml.Prison) {
         val role = player.role
         player.teleport(when (role) {
             Role.Warden -> newPrison.wardenSpawn
-            else -> newPrison.prisonerSpawn
+            Role.Solitary -> getRandomCell(newPrison.solitaryCells)
+            else -> getRandomCell(newPrison.prisonerCells)
         })
     }
 }
