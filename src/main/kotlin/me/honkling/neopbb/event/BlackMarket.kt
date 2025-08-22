@@ -46,6 +46,9 @@ private fun onInteract(event: PlayerInteractEvent) {
     for (line in lines)
     when (line) {
         "Leave Market" -> {
+            if (player.passengers.isNotEmpty())
+                return player.sendMessage("<p>You can't go out of the black market while somebody is handcuffed.".mm)
+
             player.isInBlackMarket = false
             player.teleport(currentPrison.blackMarketOut)
             return player.playSound(Sound.sound {
