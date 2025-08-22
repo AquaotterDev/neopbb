@@ -31,11 +31,12 @@ private fun accept(player: Player) {
         pastWarden.prepare(true, broadcast = false)
     }
 
+    val isInBlackMarket = player.isInBlackMarket
     player.role = invite.role
     player.prepare(true, broadcast = true)
     invite.cancel()
     player.invite = null
 
-    if (player.role.isAuthority && player.isInBlackMarket)
+    if (player.role.isAuthority && isInBlackMarket)
         player.teleport(currentPrison.blackMarketOut)
 }

@@ -45,6 +45,9 @@ private fun hire(player: Player, target: Player, role: Role) {
     if (role == Role.Swat && !swatUnlocked)
         return player.sendMessage("<p>You don't have SWAT Guards unlocked!".mm)
 
+    if (!role.isAuthority || role == Role.Warden)
+        return player.sendMessage("<p>You can't do that.".mm)
+
     player.sendMessage("<p><s>${target.name}</s> has been sent an invitation.".mm)
     target.sendMessage("\n<p>The warden wants you to be a ${role.name.lowercase()}!\n<p><s><u><click:run_command:/accept>Accept</s>\n".mm)
     target.invite = Invite(target, role).schedule()
