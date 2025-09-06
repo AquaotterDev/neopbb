@@ -4,6 +4,7 @@ import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.lib.isInCell
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.Role
+import me.honkling.neopbb.profile.isRespawning
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.profile.solitaryTask
 import net.kyori.adventure.audience.Audience
@@ -14,12 +15,13 @@ internal fun executeSolitary() {
     val solitaryPlayers = Bukkit.getOnlinePlayers().filter { it.role == Role.Solitary }
 
     for (player in solitaryPlayers) {
-        if (isInCell(player, currentPrison.solitaryCells))
+        if (isInCell(player, currentPrison.solitaryCells) || player.isRespawning)
             continue
 
         player.role = Role.Prisoner
-        player.role.team.addPlayer(player) // Doesn't swap team without prepare...
+        player.role.team.addPlayer(player)
         player.solitaryTask?.let { Bukkit.getScheduler().cancelTask(it) }
+        player.solitaryTask = null
 
         val guards = Audience.audience(Bukkit.getOnlinePlayers().filter { it.role.isAuthority })
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0))

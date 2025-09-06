@@ -4,6 +4,7 @@ import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.lib.isInCell
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.inCell
+import me.honkling.neopbb.profile.isRespawning
 import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.schedule.Period
 import me.honkling.neopbb.schedule.period
@@ -23,7 +24,7 @@ internal fun executeLightsOut() {
             || ((player.getPotionEffect(PotionEffectType.GLOWING)?.duration ?: 0) >= 5))
             continue
 
-        val isInCell = isInCell(player, currentPrison.prisonerCells)
+        val isInCell = isInCell(player, currentPrison.prisonerCells) && !player.isRespawning
         player.inCell = isInCell
 
         if (isInCell) {

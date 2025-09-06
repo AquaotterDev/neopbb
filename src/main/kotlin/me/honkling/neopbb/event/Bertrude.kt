@@ -6,7 +6,6 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.bertrude
 import me.honkling.neopbb.gui.Bertrude
 import me.honkling.neopbb.lib.mm
-import net.kyori.adventure.text.Component
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 
 private fun onInteract(event: PlayerInteractAtEntityEvent) {

@@ -20,7 +20,7 @@ import kotlin.math.ceil
 
 class SwitchMaps {
     private fun buildInventory(): Inventory {
-        val size = (ceil(prisonsToml.prisons.size / 9.0).toInt() * 9).coerceIn(0, 6)
+        val size = ceil(prisonsToml.prisons.size / 9.0).toInt().coerceIn(0, 6)* 9
         val inventory = Bukkit.createInventory(null, size, Component.text("Switch Maps"))
 
         for ((index, prison) in prisonsToml.prisons.withIndex()) {

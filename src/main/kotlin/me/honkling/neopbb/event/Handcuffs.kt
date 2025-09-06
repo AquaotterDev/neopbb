@@ -6,7 +6,7 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.handcuffTask
-import me.honkling.neopbb.profile.handcuffs
+import me.honkling.neopbb.profile.isInBlackMarket
 import me.honkling.neopbb.profile.role
 import net.kyori.adventure.title.TitlePart
 import org.bukkit.Bukkit
@@ -39,7 +39,7 @@ private fun onDeath(event: PlayerDeathEvent) {
         return
     }
 
-    if (attacker == null || !attacker.role.isAuthority || attacker.passengers.isNotEmpty() ||
+    if (attacker == null || (attacker.isInBlackMarket != victim.isInBlackMarket) || !attacker.role.isAuthority || attacker.passengers.isNotEmpty() ||
         attacker.vehicle is Player || victim.vehicle is Player)
         return
 

@@ -6,16 +6,15 @@ import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lastLockdown
 import me.honkling.neopbb.lastMapSwitch
+import me.honkling.neopbb.lib.getAllSignLines
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.*
 import me.honkling.neopbb.schedule.Period
 import me.honkling.neopbb.schedule.period
 import me.honkling.neopbb.schedule.tickSchedule
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Sign
-import org.bukkit.block.sign.Side
 import org.bukkit.event.player.PlayerInteractEvent
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -25,17 +24,14 @@ private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
     val state = event.clickedBlock?.state as? Sign
         ?: return
+    val lines = getAllSignLines(state)
 
-    val side = state.getSide(Side.FRONT)
-    val lineOne = PlainTextComponentSerializer.plainText().serialize(side.line(1))
-    val lineTwo = PlainTextComponentSerializer.plainText().serialize(side.line(2))
-
-    if (lineTwo == "SWAT Guards")
-        player.purchase(2500f, swatUnlocked) {
-            Bukkit.getServer().sendMessage("<p><s>${player.name}</s> has unlocked SWAT guards!".mm)
-            swatUnlocked = true
-        }
-    else when (lineOne) {
+    for(line in lines)
+    when (line) {
+        "SWAT Guards" -> return player.purchase(2500f, swatUnlocked) {
+                Bukkit.getServer().sendMessage("<p><s>${player.name}</s> has unlocked SWAT guards!".mm)
+                swatUnlocked = true
+            }
         "Lockdown" -> {
             val since = Clock.System.now().epochSeconds - lastLockdown
             val cooldown = 60 * 10
@@ -48,7 +44,7 @@ private fun onInteract(event: PlayerInteractEvent) {
 
             period = Period.Lockdown
             lastLockdown = Clock.System.now().epochSeconds
-            tickSchedule()
+            return tickSchedule()
         }
         "Switch Maps" -> {
             if (player != warden)
@@ -65,7 +61,7 @@ private fun onInteract(event: PlayerInteractEvent) {
 
             val gui = SwitchMaps()
 
-            with (gui) {
+            return with (gui) {
                 player.openGUI()
             }
         }
