@@ -317,9 +317,11 @@ enum class Role(
             .color(40, 20, 2)
             .build()
 
-        inventory.setItem(EquipmentSlot.CHEST, chestplate)
-        inventory.setItem(EquipmentSlot.LEGS, leggings)
-        inventory.setItem(EquipmentSlot.FEET, boots)
+        if (spawnWithUniform) {
+            inventory.setItem(EquipmentSlot.CHEST, chestplate)
+            inventory.setItem(EquipmentSlot.LEGS, leggings)
+            inventory.setItem(EquipmentSlot.FEET, boots)
+        }
 
         val prisonCell = getRandomCell(currentPrison.prisonerCells)
         teleport(prisonCell)
