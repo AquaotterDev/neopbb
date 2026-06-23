@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.2.20-Beta2"
-    id("com.gradleup.shadow") version "8.3.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
+    kotlin("jvm") version "2.4.0"
+    id("com.gradleup.shadow") version "9.4.2"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
 }
 
 group = "me.honkling"
@@ -18,22 +18,19 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
-    implementation("io.github.honkling.commando:spigot:3.0.4")
+    paperweight.paperDevBundle("26.2.build.+")
+    implementation("io.github.honkling.commando:spigot:3.0.5")
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation("dev.kord:kord-core:0.15.0")
     implementation(kotlin("reflect"))
 
     compileOnly("com.github.honkling:ruby:develop")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.9.3")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
 }
 
 tasks {
     runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21.4")
+        minecraftVersion("26.2")
     }
 
     jar {
@@ -66,5 +63,5 @@ tasks {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }

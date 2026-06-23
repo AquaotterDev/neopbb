@@ -9,8 +9,8 @@ import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.offline.DataAccess
 import me.honkling.neopbb.profile.offline.OfflineEnderChest
 import me.honkling.neopbb.scope
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.world.ItemStackWithSlot
 import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.inventory.CraftInventory
 import org.bukkit.entity.Player
@@ -31,7 +31,7 @@ private fun clear(sender: Player, name: String) {
         val player = Bukkit.getOfflinePlayer(name)
         val dataAccess = DataAccess(player)
 
-        dataAccess.compound.put("EnderItems", ListTag(mutableListOf(), CompoundTag.TAG_COMPOUND))
+        dataAccess.valueOutput.list("EnderItems", ItemStackWithSlot.CODEC)
         dataAccess.save()
         sender.sendMessage("<p>Cleared <s>${player.name}</s>'s ender chest.".mm)
     }

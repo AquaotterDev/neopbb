@@ -101,7 +101,7 @@ private fun onDismount(event: EntityDismountEvent) {
     val player = event.entity as? Player
         ?: return
 
-    val isDisconnected = (player as CraftPlayer).handle.connection.processedDisconnect
+    val isDisconnected = (player as CraftPlayer).handle.connection.isDisconnected
     if (!isDisconnected && player.handcuffTask != null)
         event.isCancelled = true
 }
