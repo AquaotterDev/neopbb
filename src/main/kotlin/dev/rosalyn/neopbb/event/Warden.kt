@@ -1,0 +1,80 @@
+@file:Listener
+
+package dev.rosalyn.neopbb.event
+
+import me.honkling.commando.spigot.event.Listener
+import dev.rosalyn.neopbb.gui.SwitchMaps
+import dev.rosalyn.neopbb.lastLockdown
+import dev.rosalyn.neopbb.lastMapSwitch
+import dev.rosalyn.neopbb.lib.getAllSignLines
+import dev.rosalyn.neopbb.lib.mm
+import dev.rosalyn.neopbb.profile.*
+import dev.rosalyn.neopbb.schedule.Period
+import dev.rosalyn.neopbb.schedule.period
+import dev.rosalyn.neopbb.schedule.tickSchedule
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.block.Sign
+import org.bukkit.event.player.PlayerInteractEvent
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+
+@OptIn(ExperimentalTime::class)
+private fun onInteract(event: PlayerInteractEvent) {
+    val player = event.player
+    val state = event.clickedBlock?.state as? Sign
+        ?: return
+    val lines = getAllSignLines(state)
+
+    for(line in lines)
+    when (line) {
+        "SWAT Guards" -> return player.purchase(2500f, swatUnlocked) {
+                Bukkit.getServer().sendMessage("<p><s>${player.name}</s> has unlocked SWAT guards!".mm)
+                swatUnlocked = true
+            }
+        "Lockdown" -> {
+            val since = Clock.System.now().epochSeconds - lastLockdown
+            val cooldown = 60 * 10
+
+            if (since < cooldown) {
+                val remaining = cooldown - since
+                val unit = if (remaining == 1L) "second" else "seconds"
+                return player.sendMessage("<p>That's on cooldown! <s>$remaining $unit</s> left.".mm)
+            }
+
+            period = Period.Lockdown
+            lastLockdown = Clock.System.now().epochSeconds
+            return tickSchedule()
+        }
+        "Switch Maps" -> {
+            if (player != warden)
+                return player.sendMessage("<p>Only the warden can switch maps.".mm)
+
+            val since = Clock.System.now().epochSeconds - lastMapSwitch
+            val cooldown = 60 * 3
+
+            if (since < cooldown) {
+                val remaining = cooldown - since
+                val unit = if (remaining == 1L) "second" else "seconds"
+                return player.sendMessage("<p>That's on cooldown! <s>$remaining $unit</s> left.".mm)
+            }
+
+            val gui = SwitchMaps()
+
+            return with (gui) {
+                player.openGUI()
+            }
+        }
+    }
+}
+
+private fun onOpenEnderChest(event: PlayerInteractEvent) {
+    val player = event.player
+
+    if (event.clickedBlock?.type == Material.ENDER_CHEST && event.action.isRightClick && player.role.isAuthority) {
+        val rolePart = if (player.role == Role.Warden) "the warden" else "a ${player.role.name.lowercase()}"
+
+        player.sendMessage("<p>You cannot open your ender chest as $rolePart.".mm)
+        event.isCancelled = true
+    }
+}
